@@ -6,10 +6,10 @@
         <div class="w-full flex justify-end headerLayout items-center pr-5">
           <v-list class="cursor-pointer">
             <v-list-item class="text-start text-xs" :prepend-avatar="avatarPath" :title="`Hola, ${username}`"
-              :subtitle="rol">
+              :subtitle="role == 'student'? 'Estudiante': 'Administrador'">
             </v-list-item>
           </v-list>
-          <MenuAsPopover :username="username" :rol="rol" :avatarPath="avatarPath" />
+          <MenuAsPopover :username="username" :rol="role" :avatarPath="avatarPath" />
         </div>
         <div class="main-container w-full h-full overflow-y-scroll">
           <router-view />
@@ -37,7 +37,7 @@ export default {
   }),
   setup() {
     const username = store.state.usuario;
-    const rol = store.state.rol;
+    const role = store.state.role;
     const openSidebar = ref(true);
     const logoutProcessing = ref(false);
     const logoImage = store.state.namelogo;
@@ -69,7 +69,7 @@ export default {
 
     return {
       username,
-      rol,
+      role,
       openSidebar,
       logoutProcessing,
       logoImage,

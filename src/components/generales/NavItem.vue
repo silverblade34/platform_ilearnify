@@ -1,8 +1,8 @@
 <template>
     <router-link v-if="!item.children.length" :href="item.href" class="button-link my-2 flex cursor-pointer w-full items-center py-3 px-4
          text-gray-500 hover:bg-gray-100 hover:text-gray-600" :to="item.to" :title="item.label">
-        <i :class="item.icon"></i>
-        <span class="label">{{ item.label }}</span>
+        <i :class="item.icon" class="text-xl"></i>
+        <span class="label ml-2">{{ item.label }}</span>
     </router-link>
     <Disclosure v-else v-slot="{ open }">
         <span class="p-0 py-0 path_desplegado">

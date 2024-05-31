@@ -5,7 +5,7 @@
             <div class="w-full px-3 pt-5 pb-8 relative">
                 <div class="w-full">
                     <div class="flex justify-center items-center">
-                        <img src="../assets/login/logo_aula20.png" alt="" class="w-[8rem] rounded-md">
+                        <img src="../assets/login/logo_ilearnify.png" alt="" class="w-[8rem] rounded-md">
                     </div>
                     <!-- <span class="md:hidden lg:block title_empresa text-center pt-3"> {{ empresa }} </span> -->
                 </div>
@@ -34,34 +34,34 @@ export default {
     components: { NavItem },
     setup() {
         const navItems = ref([]);
-        if (store.state.rol == "ALUMNO") {
+        if (store.state.role == "student") {
             navItems.value = [
                 {
-                    to: "/dashboard",
-                    label: "Dashboard",
+                    to: "/home_student",
+                    label: "Mis Cursos",
                     children: [],
-                    icon: "fa-solid fa-chart-pie mr-2"
+                    icon: "mdi mdi-book-open-variant"
+                },
+                {
+                    to: "/biblioteca",
+                    label: "Biblioteca",
+                    children: [],
+                    icon: "mdi mdi-bookshelf"
                 },
                 {
                     to: "/cursos",
-                    label: "Cursos",
+                    label: "Mis Calificaciones",
                     children: [],
-                    icon: "fa-solid fa-book-open mr-2"
+                    icon: "mdi mdi-chart-bar"
                 },
-                // {
-                //     to: "/simulacro",
-                //     label: "Simulacro",
-                //     children: [],
-                //     icon: "fa-solid fa-graduation-cap mr-2"
-                // },
-                // {
-                //     to: "/reporte",
-                //     label: "Reporte",
-                //     children: [],
-                //     icon: "fa-solid fa-table mr-2"
-                // }
+                {
+                    to: "/cursos",
+                    label: "Explorar cursos",
+                    children: [],
+                    icon: "mdi mdi-book-multiple"
+                },
             ]
-        } else if (store.state.rol == "PROFESOR") {
+        } else if (store.state.role == "PROFESOR") {
             navItems.value = [
                 {
                     to: "/especialidades",
@@ -70,7 +70,7 @@ export default {
                     icon: "fa-solid fa-book-open mr-2"
                 }
             ]
-        } else if (store.state.rol == "ADMINISTRADOR") {
+        } else if (store.state.role == "ADMINISTRADOR") {
             navItems.value = [
                 {
                     to: "/dashboard_admin",
@@ -281,7 +281,7 @@ export default {
 
         i {
             color: rgb(184, 184, 184);
-            font-size: 15px;
+            font-size: 19px;
             margin-right: 0;
         }
 

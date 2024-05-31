@@ -30,7 +30,6 @@
 <script>
 import RecordNotes from '@/components/courses/student/RecordNotes.vue';
 import ModalSelect from '@/components/courses/student/ModalSelect.vue';
-import { findSyllabusCourseApi } from '@/api/teacher/CourseService';
 import { findAllCourseEvaluationApi } from '@/api/student/CourseService';
 import { useRouter } from 'vue-router';
 import { generateCourseEvaluationApi } from '@/api/student/CourseService';
@@ -54,7 +53,6 @@ export default ({
 
         onMounted(async () => {
             const [syllabusResponse, courseEvaluationResponse] = await Promise.all([
-                findSyllabusCourseApi(props.id),
                 findAllCourseEvaluationApi(props.id, store.state.codigo)
             ])
             nameCourse.value = syllabusResponse.data.data.name

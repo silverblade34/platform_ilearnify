@@ -1,92 +1,94 @@
 <template>
     <div class="flex w-full h-screen overflow-y-hidden">
         <div class="left">
-            <img src="../../assets/login/logo_aula20.png" class="animation a6 pb-10"
-                style="margin: 0 auto 10px;width: 220px">
-            <div class="flex justify-center">
-                <form id="login-form" class="lg:w-[80%] w-full flex flex-col justify-center text-center">
-
-                    <span class="text-gray-600 pb-1 label text-start">Usuario</span>
-                    <v-text-field color="teal-lighten-2" density="compact" placeholder="Ingrese su usuario"
-                        prepend-inner-icon="mdi mdi-account" variant="outlined" v-model="username"></v-text-field>
-                    <div class="flex justify-between">
-                        <span class="text-gray-600 pb-1 label">Contraseña</span>
-                        <a class="text-caption text-decoration-none text-teal-500" href="#" rel="noopener noreferrer"
-                            target="_blank">
-                            Olvidaste tu contraseña?</a>
-                    </div>
-                    <v-text-field color="teal-lighten-2" :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
-                        :type="visible ? 'text' : 'password'" density="compact" placeholder="Ingrese su contraseña"
-                        prepend-inner-icon="mdi-lock-outline" variant="outlined"
-                        @click:append-inner="visible = !visible" v-model="password"></v-text-field>
-                    <div>
-                        <v-col cols="auto">
-                            <v-btn size="large" color="teal-lighten-1" @click="validateCredential">Ingresar</v-btn>
-                        </v-col>
-                    </div>
-                    <div class="pt-5 flex justify-center text-sm">
-                        <span>Aún no tienes una cuenta?</span><span
-                            class="cursor-pointer text-teal-500 hover:text-teal-600 ml-2"> Registrarse</span>
-                    </div>
-                </form>
+            <div class="block w-full">
+                <img src="../../assets/login/logo_ilearnify.png" class="animation a6 pb-10"
+                    style="margin: 0 auto 10px;width: 220px">
+                <div class="flex justify-center">
+                    <FormLoginVue @validate-credentials="onValidateCredentials" @show-register="onShowRegister"
+                        v-if="typeContent == 'LOGIN'" />
+                    <FormRegisterVue v-else-if="typeContent == 'REGISTER'" @show-login="onShowLogin" @create-student="onCreateStudent"/>
+                </div>
             </div>
         </div>
         <div id="right">
         </div>
     </div>
 </template>
-
 <script>
-import { ref } from "vue"
 import { loginApi } from '@/api/login/LoginService';
 import { basicAlert } from '@/helpers/SweetAlert';
 import store from '@/store';
 import { useRouter } from 'vue-router';
+import FormLoginVue from "@/components/login/FormLogin.vue";
+import FormRegisterVue from "@/components/login/FormRegister.vue";
+import { ref } from 'vue';
 
 export default ({
+    components: { FormLoginVue, FormRegisterVue },
     setup() {
-        const username = ref('');
-        const password = ref('');
         const router = useRouter();
+        const typeContent = ref("LOGIN");
 
-        const validateCredential = async () => {
-            await loginApi(username.value, password.value)
+        const onShowRegister = () => {
+            typeContent.value = "REGISTER";
+        }
+
+        const onShowLogin = () => {
+            typeContent.value = "LOGIN";
+        }
+
+        const onValidateCredentials = async (data) => {
+            await loginApi(data.useraname, data.password)
                 .then(response => {
                     if (response.data.status == true) {
-                        store.commit('setUsuario', response.data.data.username);
-                        store.commit('setRol', response.data.data.rol);
-                        store.commit('setCodigo', response.data.data.codigo);
-                        store.commit('setIdUser', response.data.data.id);
+                        const user = response.data.data.user;
+                        store.commit('setUsuario', user.username);
+                        store.commit('setRole', user.role);
+                        store.commit('setToken', response.data.data.token);
                         store.commit('setIsAuthenticated', true);
-                        router.push('/');
-
+                        if (user.role == "student") {
+                            router.push('/home_student');
+                        } else if (user.role == "admin") {
+                            router.push('/home_admin');
+                        }
                     } else {
                         basicAlert(() => { }, 'warning', 'Credenciales incorrectas', 'Verifique su usuario y contraseña')
                     }
                 })
-                .catch(() => {
-                    basicAlert(() => { }, 'error', 'Error de conexión', 'Hubo un problema de conexión con el origen de datos')
+                .catch(error => {
+                    if (error.response) {
+                        if (error.response.status === 401) {
+                            basicAlert(() => { }, 'warning', 'Credenciales incorrectas', 'Verifique su usuario y contraseña');
+                        } else if (error.response.status === 400) {
+                            basicAlert(() => { }, 'error', 'Solicitud incorrecta', 'Los datos proporcionados no son válidos');
+                        } else {
+                            basicAlert(() => { }, 'error', 'Error de conexión', 'Hubo un problema de conexión');
+                        }
+                    } else {
+                        console.log(error);
+                        basicAlert(() => { }, 'error', 'Error de conexión', 'Hubo un problema de conexión');
+                    }
                 })
         }
         return {
-            validateCredential,
-            username,
-            password
+            onValidateCredentials,
+            onShowRegister,
+            onShowLogin,
+            typeContent
         }
     },
-    data: () => ({
-        visible: false,
-    }),
 })
 </script>
 
 <style scoped lang="scss">
 .left {
     font-family: 'Poppins', sans-serif;
-    overflow: hidden;
+    overflow-y: auto;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
+    align-items: center;
     justify-content: center;
     -webkit-animation-name: left;
     animation-name: left;
@@ -104,7 +106,7 @@ export default ({
     flex: 1;
     background-color: rgba(72, 128, 150, 0.418);
     transition: 1s;
-    background-image: url('../../assets/login/portada_login_3.jpg');
+    background-image: url('../../assets/login/portada_ilearnify.jpg');
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
