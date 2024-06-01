@@ -10,7 +10,7 @@
 </template>
 <script>
 import store from '@/store';
-import { findAllCoursesHomeApi } from '@/api/student/HomeService';
+import { findAllEnrolledCoursesHomeApi } from '@/api/student/HomeService';
 import CardCourse from '@/components/home/CardCourse.vue';
 import { onMounted, ref } from 'vue';
 
@@ -24,7 +24,7 @@ export default ({
         })
 
         const readyData = () => {
-            findAllCoursesHomeApi(store.state.token)
+            findAllEnrolledCoursesHomeApi(store.state.token)
                 .then(response => {
                     dataCourses.value = response.data.data;
                 })

@@ -55,7 +55,7 @@ export default {
                     icon: "mdi mdi-chart-bar"
                 },
                 {
-                    to: "/cursos",
+                    to: "/explorer_courses",
                     label: "Explorar cursos",
                     children: [],
                     icon: "mdi mdi-book-multiple"

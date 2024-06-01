@@ -7,7 +7,8 @@
                 <div class="flex justify-center">
                     <FormLoginVue @validate-credentials="onValidateCredentials" @show-register="onShowRegister"
                         v-if="typeContent == 'LOGIN'" />
-                    <FormRegisterVue v-else-if="typeContent == 'REGISTER'" @show-login="onShowLogin" @create-student="onCreateStudent"/>
+                    <FormRegisterVue v-else-if="typeContent == 'REGISTER'" @show-login="onShowLogin"
+                        @create-student="onCreateStudent" />
                 </div>
             </div>
         </div>
@@ -23,6 +24,7 @@ import { useRouter } from 'vue-router';
 import FormLoginVue from "@/components/login/FormLogin.vue";
 import FormRegisterVue from "@/components/login/FormRegister.vue";
 import { ref } from 'vue';
+import { studentRegisterApi } from '@/api/student/StudentService';
 
 export default ({
     components: { FormLoginVue, FormRegisterVue },
@@ -38,8 +40,34 @@ export default ({
             typeContent.value = "LOGIN";
         }
 
+        const onCreateStudent = (data) => {
+
+            studentRegisterApi(store.state.token, data)
+                .then(response => {
+                    console.log(response.data)
+                    typeContent.value = "LOGIN";
+                    basicAlert(() => { }, 'success', 'Logrado', 'Se ha registrado el estudiante correctamente');
+                })
+                .catch(error => {
+                    if (error.response) {
+                        if (error.response.status === 401) {
+                            localStorage.clear();
+                            location.reload();
+                        } else if (error.response.status === 400) {
+                            basicAlert(() => { }, 'error', 'Solicitud incorrecta', 'Los datos proporcionados no son válidos');
+                        } else {
+                            basicAlert(() => { }, 'error', 'Error de conexión', 'Hubo un problema de conexión');
+                        }
+                    } else {
+                        basicAlert(() => { }, 'error', 'Error de conexión', 'Hubo un problema de conexión');
+                    }
+                })
+        }
+
         const onValidateCredentials = async (data) => {
-            await loginApi(data.useraname, data.password)
+            console.log("-------------------------------------")
+            console.log(data)
+            await loginApi(data.username, data.password)
                 .then(response => {
                     if (response.data.status == true) {
                         const user = response.data.data.user;
@@ -73,6 +101,7 @@ export default ({
         }
         return {
             onValidateCredentials,
+            onCreateStudent,
             onShowRegister,
             onShowLogin,
             typeContent
