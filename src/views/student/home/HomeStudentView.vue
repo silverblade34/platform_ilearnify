@@ -1,11 +1,23 @@
 <template>
     <h1 class="font-bold text-xl text-gray-500 title-views">Cursos</h1>
-    <div class="py-5">
-        <div class="grid grid-cols-5 gap-4">
-            <template v-for="course in dataCourses" :key="course.course_id">
-                <CardCourse :title="course.title" :description="course.description" />
-            </template>
-        </div>
+    <div class="py-5 h-full">
+        <template v-if="dataCourses.length > 0">
+            <div class="grid grid-cols-5 gap-4">
+                <template v-for="course in dataCourses" :key="course.course_id">
+                    <CardCourse :title="course.title" :description="course.description" />
+                </template>
+            </div>
+        </template>
+        <template v-else>
+            <div class="w-full h-full flex justify-center items-center">
+                <div>
+                    <p>Aún no estas registrado en ningún curso</p>
+                    <div class="flex justify-center pt-4">
+                        <v-btn color="cyan-darken-1" @click="sendPassword" size="small">Explorar cursos</v-btn>
+                    </div>
+                </div>
+            </div>
+        </template>
     </div>
 </template>
 <script>

@@ -5,10 +5,13 @@
                 <img src="../../assets/login/logo_ilearnify.png" class="animation a6 pb-10"
                     style="margin: 0 auto 10px;width: 220px">
                 <div class="flex justify-center">
-                    <FormLoginVue @validate-credentials="onValidateCredentials" @show-register="onShowRegister"
+                    <FormLoginVue @validate-credentials="onValidateCredentials" @show-register="onShowRegister" @show-forgotpassword="onShowForgotPassword"
                         v-if="typeContent == 'LOGIN'" />
                     <FormRegisterVue v-else-if="typeContent == 'REGISTER'" @show-login="onShowLogin"
                         @create-student="onCreateStudent" />
+
+                    <FormForgotPasswordVue v-else-if="typeContent == 'FORGOT_PASSWORD'" @show-login="onShowLogin"
+                        @send-password="onSendPassword" />
                 </div>
             </div>
         </div>
@@ -23,11 +26,12 @@ import store from '@/store';
 import { useRouter } from 'vue-router';
 import FormLoginVue from "@/components/login/FormLogin.vue";
 import FormRegisterVue from "@/components/login/FormRegister.vue";
+import FormForgotPasswordVue from "@/components/login/FormForgotPassword.vue";
 import { ref } from 'vue';
 import { studentRegisterApi } from '@/api/student/StudentService';
 
 export default ({
-    components: { FormLoginVue, FormRegisterVue },
+    components: { FormLoginVue, FormRegisterVue, FormForgotPasswordVue },
     setup() {
         const router = useRouter();
         const typeContent = ref("LOGIN");
@@ -38,6 +42,10 @@ export default ({
 
         const onShowLogin = () => {
             typeContent.value = "LOGIN";
+        }
+
+        const onShowForgotPassword = () => {
+            typeContent.value = "FORGOT_PASSWORD";
         }
 
         const onCreateStudent = (data) => {
@@ -65,8 +73,6 @@ export default ({
         }
 
         const onValidateCredentials = async (data) => {
-            console.log("-------------------------------------")
-            console.log(data)
             await loginApi(data.username, data.password)
                 .then(response => {
                     if (response.data.status == true) {
@@ -99,8 +105,15 @@ export default ({
                     }
                 })
         }
+
+        const onSendPassword = (data) => {
+            console.log(data);
+        }
+
         return {
+            onShowForgotPassword,
             onValidateCredentials,
+            onSendPassword,
             onCreateStudent,
             onShowRegister,
             onShowLogin,

@@ -5,9 +5,9 @@
             prepend-inner-icon="mdi mdi-account" variant="outlined" v-model="username"></v-text-field>
         <div class="flex justify-between">
             <span class="text-gray-600 pb-1 label">Contraseña</span>
-            <a class="text-caption text-decoration-none text-cyan-500" href="#" rel="noopener noreferrer"
-                target="_blank">
-                Olvidaste tu contraseña?</a>
+            <span class="text-caption text-decoration-none text-cyan-500 cursor-pointer hover:text-cyan-600" href="#" rel="noopener noreferrer"
+                @click="showForgotPassword">
+                Olvidaste tu contraseña?</span>
         </div>
         <v-text-field color="cyan-darken-1" :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
             :type="visible ? 'text' : 'password'" density="compact" placeholder="Ingrese su contraseña"
@@ -32,7 +32,7 @@ const username = ref('');
 const password = ref('');
 const visible = ref(false);
 /* eslint-disable */
-const emit = defineEmits(['validate-credentials', 'show-register']);
+const emit = defineEmits(['validate-credentials', 'show-register', 'show-forgotpassword']);
 
 const validateCredential = () => {
     emit('validate-credentials', { username: username.value, password: password.value });
@@ -40,5 +40,9 @@ const validateCredential = () => {
 
 const showRegister = () => {
     emit('show-register')
+}
+
+const showForgotPassword = () => {
+    emit('show-forgotpassword')
 }
 </script>

@@ -9,3 +9,10 @@ export function loginApi(username, password) {
             password
         })
 }
+
+export function recoverPasswordApi(username) {
+    return axios.post(`${baseURL}user/recover-password`,
+        {
+            username,
+        })
+}
