@@ -14,16 +14,23 @@
         </v-card-text>
 
         <v-card-actions>
-            <v-btn color="cyan-darken-1" text="Ver más" size="small" variant="tonal"></v-btn>
+            <v-btn color="cyan-darken-1" text="Ver más" size="small" variant="tonal" @click="seeMore"></v-btn>
         </v-card-actions>
     </v-card>
 </template>
 <script setup>
- /* eslint-disable */
-import { defineProps } from 'vue';
+/* eslint-disable */
+import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
+    id: Number,
     title: String,
     description: String,
 });
+
+const emit = defineEmits(['see-more'])
+
+const seeMore = () => {
+    emit('see-more', { id: props.id, name: props.title })
+}
 </script>

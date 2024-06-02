@@ -27,6 +27,24 @@ const router = createRouter({
                     path: "library_student",
                     component: () => import("@/views/student/LibraryView.vue"),
                 },
+                {
+                    name: "course_student",
+                    path: "course_student/:id/:name",
+                    component: () => import("@/views/student/CourseStudentView.vue"),
+                    beforeEnter: (to, from, next) => {
+                        const hasIdParam = to.params.id;
+                        const hasNameParam = to.params.name;
+                        console.log("----------------------------------------")
+                        console.log(hasIdParam);
+                        console.log(hasNameParam);
+                        console.log("----------------------------------------")
+                        if (!hasIdParam || !hasNameParam) {
+                            next({ name: 'home_student' });
+                        } else {
+                            next();
+                        }
+                    },
+                },
             ]
         },
         {

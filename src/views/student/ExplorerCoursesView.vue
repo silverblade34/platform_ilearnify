@@ -4,7 +4,7 @@
         <div class="container-cards-courses gap-4">
             <template v-for="course in dataCourses" :key="course.course_id">
                 <CardCourseExplorer :title="course.title" :description="course.description" :id="course.course_id"
-                    @enroll-course="inEnrollCourse" />
+                    :isEnrolled="course.is_enrolled" @enroll-course="onEnrollCourse" />
             </template>
         </div>
     </div>
@@ -47,12 +47,14 @@ export default ({
                 })
         }
 
-        const inEnrollCourse = (data) => {
+        const onEnrollCourse = (data) => {
             dialogLoader.value = true;
             enrollCourseApi(store.state.token, data.idCourse)
                 .then(response => {
                     dialogLoader.value = false;
-                    basicAlert(() => { }, 'success', 'Logrado', response.data.message);
+                    basicAlert(async () => {
+                        await readyData();
+                    }, 'success', 'Logrado', response.data.message);
                 })
                 .catch(error => {
                     dialogLoader.value = false;
@@ -62,7 +64,7 @@ export default ({
         }
 
         return {
-            inEnrollCourse,
+            onEnrollCourse,
             dialogLoader,
             dataCourses
         }

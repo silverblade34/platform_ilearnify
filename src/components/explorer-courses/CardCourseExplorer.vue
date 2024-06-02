@@ -14,8 +14,9 @@
         </v-card-text>
 
         <v-card-actions>
-            <v-btn color="cyan-darken-1" text="Ver más" size="small"></v-btn>
-            <v-btn color="indigo-lighten-2" text="Inscribirse" size="small" @click="enrollInTheCourse"></v-btn>
+            <v-btn color="cyan-darken-1" text="Ver más" size="small" variant="tonal"></v-btn>
+            <v-btn v-if="!isEnrolled" color="indigo-lighten-2" size="small" variant="tonal" @click="enrollInTheCourse">Inscribirse</v-btn>
+            <v-btn v-else color="indigo-lighten-2" size="small">Inscrito</v-btn>
         </v-card-actions>
     </v-card>
 </template>
@@ -27,6 +28,7 @@ const props = defineProps({
     id: Number,
     title: String,
     description: String,
+    isEnrolled: Boolean
 });
 
 const emit = defineEmits(['enroll-course'])

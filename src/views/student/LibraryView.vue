@@ -27,8 +27,8 @@
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="green" size="small" variant="tonal" @click="downloadDocument()">Descargar</v-btn>
-                <v-btn color="red" @click="dialogPreview = false" size="small" variant="tonal">Cerrar</v-btn>
+                <v-btn color="grey" @click="dialogPreview = false" size="small" variant="tonal">Cerrar</v-btn>
+                <v-btn color="cyan-darken-1" size="small" variant="tonal" @click="downloadDocument()">Descargar</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
