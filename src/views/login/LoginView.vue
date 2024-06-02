@@ -5,8 +5,8 @@
                 <img src="../../assets/login/logo_ilearnify.png" class="animation a6 pb-10"
                     style="margin: 0 auto 10px;width: 220px">
                 <div class="flex justify-center">
-                    <FormLoginVue @validate-credentials="onValidateCredentials" @show-register="onShowRegister" @show-forgotpassword="onShowForgotPassword"
-                        v-if="typeContent == 'LOGIN'" />
+                    <FormLoginVue @validate-credentials="onValidateCredentials" @show-register="onShowRegister"
+                        @show-forgotpassword="onShowForgotPassword" v-if="typeContent == 'LOGIN'" />
                     <FormRegisterVue v-else-if="typeContent == 'REGISTER'" @show-login="onShowLogin"
                         @create-student="onCreateStudent" />
 
@@ -18,9 +18,17 @@
         <div id="right">
         </div>
     </div>
+    <v-dialog v-model="dialogLoader" :scrim="false" persistent width="auto">
+        <v-card color="blue">
+            <v-card-text>
+                Procesando...
+                <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
+            </v-card-text>
+        </v-card>
+    </v-dialog>
 </template>
 <script>
-import { loginApi } from '@/api/login/LoginService';
+import { loginApi, recoverPasswordApi } from '@/api/login/LoginService';
 import { basicAlert } from '@/helpers/SweetAlert';
 import store from '@/store';
 import { useRouter } from 'vue-router';
@@ -29,12 +37,14 @@ import FormRegisterVue from "@/components/login/FormRegister.vue";
 import FormForgotPasswordVue from "@/components/login/FormForgotPassword.vue";
 import { ref } from 'vue';
 import { studentRegisterApi } from '@/api/student/StudentService';
+import { validateError } from '@/helpers/Validators';
 
 export default ({
     components: { FormLoginVue, FormRegisterVue, FormForgotPasswordVue },
     setup() {
         const router = useRouter();
         const typeContent = ref("LOGIN");
+        const dialogLoader = ref(false);
 
         const onShowRegister = () => {
             typeContent.value = "REGISTER";
@@ -57,18 +67,7 @@ export default ({
                     basicAlert(() => { }, 'success', 'Logrado', 'Se ha registrado el estudiante correctamente');
                 })
                 .catch(error => {
-                    if (error.response) {
-                        if (error.response.status === 401) {
-                            localStorage.clear();
-                            location.reload();
-                        } else if (error.response.status === 400) {
-                            basicAlert(() => { }, 'error', 'Solicitud incorrecta', 'Los datos proporcionados no son válidos');
-                        } else {
-                            basicAlert(() => { }, 'error', 'Error de conexión', 'Hubo un problema de conexión');
-                        }
-                    } else {
-                        basicAlert(() => { }, 'error', 'Error de conexión', 'Hubo un problema de conexión');
-                    }
+                    validateError(error.response);
                 })
         }
 
@@ -107,7 +106,16 @@ export default ({
         }
 
         const onSendPassword = (data) => {
-            console.log(data);
+            dialogLoader.value = true;
+            recoverPasswordApi(data.username)
+                .then(response => {
+                    dialogLoader.value = false;
+                    basicAlert(() => { }, 'success', 'Logrado', response.data.message);
+                })
+                .catch(error => {
+                    dialogLoader.value = false;
+                    validateError(error.response);
+                })
         }
 
         return {
@@ -117,7 +125,8 @@ export default ({
             onCreateStudent,
             onShowRegister,
             onShowLogin,
-            typeContent
+            typeContent,
+            dialogLoader
         }
     },
 })

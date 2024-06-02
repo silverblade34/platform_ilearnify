@@ -15,16 +15,31 @@
 
         <v-card-actions>
             <v-btn color="cyan-darken-1" text="Ver más" size="small"></v-btn>
-            <v-btn color="indigo-lighten-2" text="Inscribirse al curso" size="small"></v-btn>
+            <v-btn color="indigo-lighten-2" text="Inscribirse al curso" size="small" @click="enrollInTheCourse"></v-btn>
         </v-card-actions>
     </v-card>
 </template>
 <script setup>
- /* eslint-disable */
+
+/* eslint-disable */
+import { confirmBasic } from '@/helpers/SweetAlert';
 import { defineProps } from 'vue';
 
 const props = defineProps({
+    id: Number,
     title: String,
     description: String,
 });
+
+const emit = defineEmits(['enroll-course'])
+
+const enrollInTheCourse = () => {
+    confirmBasic(
+        async () => {
+            emit('enroll-course', { idCourse: props.id });
+        },
+        "¿Estás seguro de registrarte en este curso?",
+        "Aceptar"
+    );
+}
 </script>

@@ -9,3 +9,14 @@ export function findAllExplorerCoursesApi(token) {
 
     return axiosInstance.get(`${baseURL}courses/listAll`, { headers });
 }
+
+export function enrollCourseApi(token, courseId) {
+    const data = {
+        course_id: courseId
+    }
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
+
+    return axiosInstance.get(`${baseURL}courses/enroll`, data, { headers });
+}

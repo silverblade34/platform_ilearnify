@@ -13,7 +13,7 @@
                 <div>
                     <p>Aún no estas registrado en ningún curso</p>
                     <div class="flex justify-center pt-4">
-                        <v-btn color="cyan-darken-1" @click="sendPassword" size="small">Explorar cursos</v-btn>
+                        <v-btn color="cyan-darken-1" @click="goToExplorerCourses" size="small">Explorar cursos</v-btn>
                     </div>
                 </div>
             </div>
@@ -25,14 +25,16 @@ import store from '@/store';
 import { findAllEnrolledCoursesHomeApi } from '@/api/student/HomeService';
 import CardCourse from '@/components/home/CardCourse.vue';
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default ({
     components: { CardCourse },
     setup() {
         const dataCourses = ref([]);
+        const router = useRouter();
 
         onMounted(async () => {
-            await readyData();
+            readyData();
         })
 
         const readyData = () => {
@@ -42,7 +44,12 @@ export default ({
                 })
         }
 
+        const goToExplorerCourses = () => {
+            router.push('/explorer_courses');
+        }
+
         return {
+            goToExplorerCourses,
             dataCourses
         }
     }

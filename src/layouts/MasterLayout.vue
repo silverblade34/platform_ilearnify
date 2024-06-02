@@ -49,12 +49,12 @@ export default {
       window.removeEventListener('resize', checkWindowWidth); // Eliminar el evento de cambio de tamaño de ventana al desmontar el componente
     })
     const toggleSidebar = () => {
-      if (window.innerWidth >= 1000) {
+      if (window.innerWidth >= 1400) {
         openSidebar.value = !openSidebar.value; // Abrir el sidebar solo si el ancho de la ventana es mayor o igual a 1000px
       }
     }
     const checkWindowWidth = () => {
-      if (window.innerWidth < 1000) {
+      if (window.innerWidth < 1400) {
         openSidebar.value = false; // Cerrar la barra lateral cuando el ancho de la ventana sea menor a 1000px
       } else {
         openSidebar.value = true; // Abrir la barra lateral cuando el ancho de la ventana sea mayor o igual a 1000px
@@ -104,6 +104,12 @@ export default {
 
 .nav-mobile {
   display: none;
+}
+
+@media screen and (max-width: 1400px) {
+  .open_close_sidebar{
+    display: none;
+  }
 }
 
 @media screen and (max-width: 660px) {
