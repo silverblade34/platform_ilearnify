@@ -32,10 +32,12 @@ export default ({
         const dialogLoader = ref(false);
 
         onMounted(async () => {
-            readyData();
+            dialogLoader.value = true;
+            await readyData();
+            dialogLoader.value = false;
         })
 
-        const readyData = () => {
+        const readyData = async () => {
             findAllExplorerCoursesApi(store.state.token)
                 .then(response => {
                     dataCourses.value = response.data.data;
@@ -47,9 +49,6 @@ export default ({
 
         const inEnrollCourse = (data) => {
             dialogLoader.value = true;
-            console.log("--------------------------")
-            console.log(data)
-            console.log("--------------------------")
             enrollCourseApi(store.state.token, data.idCourse)
                 .then(response => {
                     dialogLoader.value = false;

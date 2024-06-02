@@ -15,15 +15,13 @@
 
         <v-card-actions>
             <v-btn color="cyan-darken-1" text="Ver más" size="small"></v-btn>
-            <v-btn color="indigo-lighten-2" text="Inscribirse al curso" size="small" @click="enrollInTheCourse"></v-btn>
+            <v-btn color="indigo-lighten-2" text="Inscribirse" size="small" @click="enrollInTheCourse"></v-btn>
         </v-card-actions>
     </v-card>
 </template>
 <script setup>
-
-/* eslint-disable */
 import { confirmBasic } from '@/helpers/SweetAlert';
-import { defineProps } from 'vue';
+import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
     id: Number,

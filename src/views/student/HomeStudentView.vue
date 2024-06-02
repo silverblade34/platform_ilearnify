@@ -19,6 +19,14 @@
             </div>
         </template>
     </div>
+    <v-dialog v-model="dialogLoader" :scrim="false" persistent width="auto">
+        <v-card color="blue">
+            <v-card-text>
+                Procesando...
+                <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
+            </v-card-text>
+        </v-card>
+    </v-dialog>
 </template>
 <script>
 import store from '@/store';
@@ -32,12 +40,15 @@ export default ({
     setup() {
         const dataCourses = ref([]);
         const router = useRouter();
+        const dialogLoader = ref(false);
 
         onMounted(async () => {
-            readyData();
+            dialogLoader.value = true;
+            await readyData();
+            dialogLoader.value = false;
         })
 
-        const readyData = () => {
+        const readyData = async () => {
             findAllEnrolledCoursesHomeApi(store.state.token)
                 .then(response => {
                     dataCourses.value = response.data.data;
@@ -50,6 +61,7 @@ export default ({
 
         return {
             goToExplorerCourses,
+            dialogLoader,
             dataCourses
         }
     }

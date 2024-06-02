@@ -43,13 +43,19 @@ export default {
                     icon: "mdi mdi-book-open-variant"
                 },
                 {
-                    to: "/biblioteca",
+                    to: "/library_student",
                     label: "Biblioteca",
                     children: [],
                     icon: "mdi mdi-bookshelf"
                 },
                 {
-                    to: "/cursos",
+                    to: "/exams_student",
+                    label: "Mis Examenes",
+                    children: [],
+                    icon: "mdi mdi-help-box-multiple"
+                },
+                {
+                    to: "/ratings_student",
                     label: "Mis Calificaciones",
                     children: [],
                     icon: "mdi mdi-chart-bar"
@@ -62,67 +68,9 @@ export default {
                 },
             ]
         } else if (store.state.role == "PROFESOR") {
-            navItems.value = [
-                {
-                    to: "/especialidades",
-                    label: "Especialidades",
-                    children: [],
-                    icon: "fa-solid fa-book-open mr-2"
-                }
-            ]
+            console.log("PROFESOR")
         } else if (store.state.role == "ADMINISTRADOR") {
-            navItems.value = [
-                {
-                    to: "/dashboard_admin",
-                    label: "Dashboard",
-                    children: [],
-                    icon: "fa-solid fa-chart-pie mr-2"
-                },
-                {
-                    to: "/sedes",
-                    label: "Sedes",
-                    children: [],
-                    icon: "fa-solid fa-map-location-dot mr-2"
-                },
-                {
-                    to: "",
-                    label: "Usuarios",
-                    children: [
-                        {
-                            to: "/profesores",
-                            label: "Profesores",
-                            children: [],
-                            icon: "fa-solid fa-person-chalkboard mr-2"
-                        },
-                        {
-                            to: "/alumnos",
-                            label: "Alumnos",
-                            children: [],
-                            icon: "fa-solid fa-graduation-cap mr-2"
-                        },
-                    ],
-                    icon: "fa-solid fa-users mr-2"
-                },
-                {
-                    to: "",
-                    label: "Asignación",
-                    children: [
-                        {
-                            to: "/universidades",
-                            label: "Universidades",
-                            children: [],
-                            icon: "fa-solid fa-building-columns mr-2"
-                        },
-                        {
-                            to: "/cursosadmin",
-                            label: "Cursos",
-                            children: [],
-                            icon: "fa-solid fa-book-open mr-2"
-                        }
-                    ],
-                    icon: "fa-solid fa-bezier-curve mr-2"
-                }
-            ]
+            console.log("ADMINISTRADOR")
         }
         return { navItems };
     },
