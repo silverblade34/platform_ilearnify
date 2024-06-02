@@ -47,6 +47,9 @@ export default ({
 
         const inEnrollCourse = (data) => {
             dialogLoader.value = true;
+            console.log("--------------------------")
+            console.log(data)
+            console.log("--------------------------")
             enrollCourseApi(store.state.token, data.idCourse)
                 .then(response => {
                     dialogLoader.value = false;

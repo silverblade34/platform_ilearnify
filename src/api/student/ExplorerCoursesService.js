@@ -18,5 +18,5 @@ export function enrollCourseApi(token, courseId) {
         Authorization: `Bearer ${token}`,
     };
 
-    return axiosInstance.get(`${baseURL}courses/enroll`, data, { headers });
+    return axiosInstance.post(`${baseURL}courses/enroll`, data, { headers });
 }
