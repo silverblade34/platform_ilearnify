@@ -14,7 +14,7 @@
         </v-card-text>
 
         <v-card-actions>
-            <v-btn color="cyan-darken-1" text="Ver más" size="small"></v-btn>
+            <v-btn color="cyan-darken-1" text="Ver más" size="small" variant="tonal"></v-btn>
         </v-card-actions>
     </v-card>
 </template>

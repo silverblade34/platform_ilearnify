@@ -28,13 +28,15 @@ import { defineProps, defineEmits } from 'vue';
 const props = defineProps({
     title: String,
     description: String,
-    extension: String
+    extension: String,
+    documentLink: String
 });
 
 const emit = defineEmits(['view-document']);
 
 const viewDocument = () => {
-    emit('view-document');
+    emit('view-document', { documentLink: props.documentLink, extension: props.extension });
+
 };
 
 // Mapeo de extensiones a URLs de imágenes
