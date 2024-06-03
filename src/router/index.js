@@ -34,11 +34,24 @@ const router = createRouter({
                     beforeEnter: (to, from, next) => {
                         const hasIdParam = to.params.id;
                         const hasNameParam = to.params.name;
-                        console.log("----------------------------------------")
-                        console.log(hasIdParam);
-                        console.log(hasNameParam);
-                        console.log("----------------------------------------")
                         if (!hasIdParam || !hasNameParam) {
+                            next({ name: 'home_student' });
+                        } else {
+                            next();
+                        }
+                    },
+                },
+                {
+                    name: "study_material_student",
+                    path: "study_material_student/:id/:name/:idUnit/:idMaterial",
+                    component: () => import("@/views/student/StudyMaterialView.vue"),
+                    beforeEnter: (to, from, next) => {
+                        const hasIdParam = to.params.id;
+                        const hasNameParam = to.params.name;
+                        const hasIdUnitParam = to.params.idUnit;
+                        const hasIdMaterialParam = to.params.idMaterial;
+
+                        if (!hasIdParam || !hasNameParam || !hasIdUnitParam || !hasIdMaterialParam) {
                             next({ name: 'home_student' });
                         } else {
                             next();
@@ -54,7 +67,7 @@ const router = createRouter({
             path: "/login",
             name: "login",
             component: () => import("@/views/login/LoginView.vue")
-        }
+        },
     ]
 })
 // Navigation Guard
