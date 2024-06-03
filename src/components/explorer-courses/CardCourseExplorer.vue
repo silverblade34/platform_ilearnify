@@ -14,8 +14,9 @@
         </v-card-text>
 
         <v-card-actions>
-            <v-btn color="cyan-darken-1" text="Ver más" size="small" variant="tonal"></v-btn>
-            <v-btn v-if="!isEnrolled" color="indigo-lighten-2" size="small" variant="tonal" @click="enrollInTheCourse">Inscribirse</v-btn>
+            <v-btn color="cyan-darken-1" text="Ver más" size="small" variant="tonal" @click="seeMore"></v-btn>
+            <v-btn v-if="!isEnrolled" color="indigo-lighten-2" size="small" variant="tonal"
+                @click="enrollInTheCourse">Inscribirse</v-btn>
             <v-btn v-else color="indigo-lighten-2" size="small">Inscrito</v-btn>
         </v-card-actions>
     </v-card>
@@ -31,7 +32,7 @@ const props = defineProps({
     isEnrolled: Boolean
 });
 
-const emit = defineEmits(['enroll-course'])
+const emit = defineEmits(['enroll-course', 'see-more'])
 
 const enrollInTheCourse = () => {
     confirmBasic(
@@ -41,5 +42,9 @@ const enrollInTheCourse = () => {
         "¿Estás seguro de registrarte en este curso?",
         "Aceptar"
     );
+}
+
+const seeMore = () => {
+    emit('see-more', { id: props.id, name: props.title })
 }
 </script>

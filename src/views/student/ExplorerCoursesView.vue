@@ -4,7 +4,7 @@
         <div class="container-cards-courses gap-4">
             <template v-for="course in dataCourses" :key="course.course_id">
                 <CardCourseExplorer :title="course.title" :description="course.description" :id="course.course_id"
-                    :isEnrolled="course.is_enrolled" @enroll-course="onEnrollCourse" />
+                    :isEnrolled="course.is_enrolled" @enroll-course="onEnrollCourse" @see-more="onSeeMore" />
             </template>
         </div>
     </div>
@@ -24,12 +24,14 @@ import { onMounted, ref } from 'vue';
 import store from '@/store';
 import { validateError } from '@/helpers/Validators';
 import { basicAlert } from '@/helpers/SweetAlert';
+import { useRouter } from 'vue-router';
 
 export default ({
     components: { CardCourseExplorer },
     setup() {
         const dataCourses = ref([]);
         const dialogLoader = ref(false);
+        const router = useRouter();
 
         onMounted(async () => {
             dialogLoader.value = true;
@@ -63,12 +65,16 @@ export default ({
                 })
         }
 
+        const onSeeMore = (data) => {
+            router.push(`/course_student_explorer/${data.id}/${data.name}`);
+        }
+
         return {
             onEnrollCourse,
+            onSeeMore,
             dialogLoader,
             dataCourses
         }
     }
 })
 </script>
-
