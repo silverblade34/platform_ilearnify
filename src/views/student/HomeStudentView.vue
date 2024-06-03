@@ -2,7 +2,7 @@
     <h1 class="font-bold text-xl text-gray-500 title-views">Cursos Matriculados</h1>
     <div class="py-5 h-full">
         <template v-if="dataCourses.length > 0">
-            <div class="grid grid-cols-5 gap-4">
+            <div class="container-cards-courses gap-4">
                 <template v-for="course in dataCourses" :key="course.course_id">
                     <CardCourse :title="course.title" :description="course.description" :id="course.course_id"
                         @see-more="onSeeMore" />

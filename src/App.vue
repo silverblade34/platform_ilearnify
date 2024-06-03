@@ -58,7 +58,23 @@ main {
   opacity: 0;
 }
 
-.title-views{
+.title-views {
   font-family: 'Poppins', sans-serif;
+}
+
+
+.container-cards-courses {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  /* 5 columnas por defecto */
+  gap: 1rem;
+  /* Puedes ajustar el valor de gap según tus necesidades */
+}
+
+@media (max-width: 1400px) {
+  .container-cards-courses {
+    grid-template-columns: repeat(4, 1fr);
+    /* 4 columnas cuando el ancho sea menor a 1200px */
+  }
 }
 </style>
