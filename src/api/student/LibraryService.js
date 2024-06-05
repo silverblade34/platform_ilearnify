@@ -6,6 +6,6 @@ export function findAllUsersDocumentApi(token, page, limit, search) {
     const headers = {
         Authorization: `Bearer ${token}`,
     };
-
-    return axiosInstance.get(`${baseURL}library/user-documents?page=${page}&limit=${limit}&search=${search}`, { headers });
+    const searchValidate = search ? search: "";
+    return axiosInstance.get(`${baseURL}library/user-documents?page=${page}&limit=${limit}&search=${searchValidate}`, { headers });
 }

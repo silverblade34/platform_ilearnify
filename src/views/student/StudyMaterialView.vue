@@ -58,7 +58,7 @@ export default ({
                     dataUnit.value = response.data.data.find(unit => unit.unit_id == routeParams.value.idUnit)
                     const dataMaterials = dataUnit.value.materials;
                     material.value = dataMaterials.find(material => material.material_id == routeParams.value.idMaterial)
-                    materialLinkGooglePreview.value = "http://docs.google.com/gview?url=" + material.value.document_link + "&embedded=true";
+                    materialLinkGooglePreview.value = "https://docs.google.com/gview?url=" + material.value.document_link + "&embedded=true";
                 })
         }
 

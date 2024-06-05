@@ -67,10 +67,21 @@ export default {
                     icon: "mdi mdi-book-multiple"
                 },
             ]
-        } else if (store.state.role == "PROFESOR") {
-            console.log("PROFESOR")
-        } else if (store.state.role == "ADMINISTRADOR") {
-            console.log("ADMINISTRADOR")
+        } else if (store.state.role == "admin") {
+            navItems.value = [
+                {
+                    to: "/home_admin",
+                    label: "Cursos",
+                    children: [],
+                    icon: "mdi mdi-book-open-variant"
+                },
+                {
+                    to: "/library_admin",
+                    label: "Biblioteca",
+                    children: [],
+                    icon: "mdi mdi-bookshelf"
+                },
+            ]
         }
         return { navItems };
     },

@@ -9,7 +9,7 @@
               :subtitle="role == 'student'? 'Estudiante': 'Administrador'">
             </v-list-item>
           </v-list>
-          <MenuAsPopover :username="username" :rol="role" :avatarPath="avatarPath" />
+          <MenuAsPopover :username="username" :rol="role == 'student'? 'Estudiante': 'Administrador'" :avatarPath="avatarPath" />
         </div>
         <div class="main-container w-full h-full overflow-y-scroll">
           <router-view />

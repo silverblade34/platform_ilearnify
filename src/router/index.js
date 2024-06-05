@@ -72,6 +72,16 @@ const router = createRouter({
                         }
                     },
                 },
+                {
+                    name: "home_admin",
+                    path: "home_admin",
+                    component: () => import("@/views/administrator/HomeAdministratorView.vue"),
+                },
+                {
+                    name: "library_admin",
+                    path: "library_admin",
+                    component: () => import("@/views/administrator/LibraryAdminView.vue"),
+                },
             ]
         },
         {

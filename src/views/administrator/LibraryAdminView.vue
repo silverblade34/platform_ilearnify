@@ -1,5 +1,8 @@
 <template>
-    <h1 class="font-bold text-xl text-gray-500 title-views">Biblioteca</h1>
+    <div class="flex justify-between items-center">
+        <span class="font-bold text-xl text-gray-500 title-views">Administrar biblioteca</span>
+        <ModalCreateDocumentVue @create-item="onCreateItem" />
+    </div>
     <div class="py-5">
         <div class="w-full">
             <div class="lg:w-[30%] pb-4 w-full flex items-end gap-2">
@@ -43,13 +46,16 @@
 </template>
 <script>
 import { findAllUsersDocumentApi } from '@/api/student/LibraryService';
+import { createDocumentApi } from '@/api/administrator/LibraryService';
 import CardDocumentVue from '@/components/library/CardDocument.vue';
+import ModalCreateDocumentVue from '@/components/library/ModalCreateDocument.vue';
 import { onMounted, ref } from "vue";
 import store from '@/store';
 import { validateError } from '@/helpers/Validators';
+import { basicAlert } from '@/helpers/SweetAlert';
 
 export default ({
-    components: { CardDocumentVue },
+    components: { CardDocumentVue, ModalCreateDocumentVue },
     setup() {
         const dataDocuments = ref([]);
         const page = ref(1);
@@ -96,7 +102,24 @@ export default ({
             document.body.removeChild(link);
         }
 
+        const onCreateItem = (data) => {
+            dialogLoader.value = true;
+            createDocumentApi(store.state.token, data)
+                .then(response => {
+                    console.log(response.data)
+                    dialogLoader.value = false;
+                    basicAlert(async () => {
+                        await readyData();
+                    }, 'success', 'Logrado', response.data.message);
+                })
+                .catch(error => {
+                    dialogLoader.value = false;
+                    validateError(error.response);
+                })
+        }
+
         return {
+            onCreateItem,
             downloadDocument,
             searchDocuments,
             onViewDocument,
