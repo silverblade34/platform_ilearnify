@@ -1,8 +1,11 @@
 <template>
-    <div class="flex">
-        <v-btn density="compact" icon="mdi-chevron-left" color="cyan-darken-1" class="mr-2" variant="tonal"
-            @click="previousView"></v-btn>
-        <h1 class="font-bold text-xl text-gray-500 title-views">{{ routeParams.name }}</h1>
+    <div class="flex justify-between items-center">
+        <div class="flex">
+            <v-btn density="compact" icon="mdi-chevron-left" color="cyan-darken-1" class="mr-2" variant="tonal"
+                @click="previousView"></v-btn>
+            <h1 class="font-bold text-xl text-gray-500 title-views">Administrar - {{ routeParams.name }}</h1>
+        </div>
+        <ModalCreateUnitVue @create-item="onCreateItem" />
     </div>
     <div class="py-5">
         <v-expansion-panels multiple>
@@ -11,6 +14,10 @@
                 </v-expansion-panel-title>
                 <v-expansion-panel-text>
                     <div class="p-4">
+                        <div class="flex justify-end gap-2 pb-3">
+                            <ModalCreateMaterialVue :unitId="unit.unit_id" @create-item="onCreateMaterial" />
+                            <ModalCreateExamenVue :unitId="unit.unit_id"/>
+                        </div>
                         <v-alert color="#F6F6F6" density="compact" class="mb-2" v-for="item in unit.materials"
                             border="start" :key="item.material_id">
                             <div class="flex justify-between items-center">
@@ -25,8 +32,7 @@
                                 </div>
                                 <div>
                                     <v-btn density="compact" icon="mdi-chevron-right" color="cyan-darken-1" class="mr-2"
-                                        variant="tonal"
-                                        @click="goShowMaterialStudy(unit.unit_id, item.material_id)"></v-btn>
+                                        variant="tonal"></v-btn>
                                 </div>
                             </div>
                         </v-alert>
@@ -45,7 +51,7 @@
                                 </div>
                                 <div>
                                     <v-btn density="compact" icon="mdi-chevron-right" color="cyan-darken-1" class="mr-2"
-                                        variant="tonal" @click="goSolveExam(unit.unit_id, item.exam_id)"></v-btn>
+                                        variant="tonal"></v-btn>
                                 </div>
                             </div>
                         </v-alert>
@@ -66,14 +72,21 @@
 </template>
 <script>
 import { findAllCourseUnitsApi } from "@/api/student/CourseService";
-import { useRoute, useRouter } from "vue-router";
+import ModalCreateUnitVue from "@/components/admin-course/ModalCreateUnit.vue";
+import { useRoute } from "vue-router";
 import { onMounted, ref, getCurrentInstance } from "vue";
 import store from '@/store';
+import { createUnitApi } from "@/api/administrator/UnitService";
+import { basicAlert } from "@/helpers/SweetAlert";
+import { validateError } from "@/helpers/Validators";
+import ModalCreateMaterialVue from "@/components/admin-course/ModalCreateMaterial.vue";
+import { createMaterialApi } from "@/api/administrator/MaterialService";
+import ModalCreateExamenVue from "@/components/admin-course/ModalCreateExamen.vue";
 
 export default ({
+    components: { ModalCreateUnitVue, ModalCreateMaterialVue, ModalCreateExamenVue },
     setup() {
         const route = useRoute();
-        const router = useRouter();
         const routeParams = ref(route.params);
         const dataUnits = ref([]);
         const dialogLoader = ref(false);
@@ -109,18 +122,48 @@ export default ({
             }
         }
 
-        const goShowMaterialStudy = (unitId, materialId) => {
-            router.push(`/study_material_student/${routeParams.value.id}/${routeParams.value.name}/${unitId}/${materialId}`);
+        const onCreateMaterial = (data) => {
+            dialogLoader.value = true
+            const payload = {
+                unit_id: data.unitId,
+                course_id: routeParams.value.id,
+                title: data.title,
+                description: data.description,
+                file: data.file,
+            }
+            createMaterialApi(store.state.token, payload)
+                .then(response => {
+                    dialogLoader.value = false
+                    basicAlert(async () => {
+                        await readyData();
+                    }, 'success', 'Logrado', response.data.message);
+                })
+                .catch(error => {
+                    validateError(error.response);
+                })
         }
 
-        const goSolveExam = (unitId, examId) => {
-            console.log(unitId);
-            router.push(`/solve_exam/${examId}`);
+        const onCreateItem = (data) => {
+            dialogLoader.value = true
+            const payload = {
+                course_id: routeParams.value.id,
+                unit_name: data.unitName,
+            }
+            createUnitApi(store.state.token, payload)
+                .then(response => {
+                    dialogLoader.value = false
+                    basicAlert(async () => {
+                        await readyData();
+                    }, 'success', 'Logrado', response.data.message);
+                })
+                .catch(error => {
+                    validateError(error.response);
+                })
         }
 
         return {
-            goShowMaterialStudy,
-            goSolveExam,
+            onCreateMaterial,
+            onCreateItem,
             previousView,
             typeExtension,
             dialogLoader,

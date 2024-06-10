@@ -9,7 +9,7 @@
                     {{ truncatedDescription(description) }}
                 </v-card-text>
                 <v-card-actions>
-                    <v-btn class="ms-2" size="small" variant="outlined" @click="viewDocument"
+                    <v-btn class="ms-2" size="small" text="START RADIO" variant="outlined" @click="viewDocument"
                         color="cyan-darken-1">
                         Ver documento
                     </v-btn>

@@ -73,6 +73,38 @@ const router = createRouter({
                     },
                 },
                 {
+                    name: "solve_exam",
+                    path: "solve_exam/:id",
+                    component: () => import("@/views/student/SolveExamView.vue"),
+                    beforeEnter: (to, from, next) => {
+                        const hasIdParam = to.params.id;
+                        if (!hasIdParam) {
+                            next({ name: 'home_student' });
+                        } else {
+                            next();
+                        }
+                    },
+                },
+                {
+                    name: "exams_explorer",
+                    path: "exams_explorer",
+                    component: () => import("@/views/student/ExamsExplorerView.vue"),
+                },
+                {
+                    name: "course_admin",
+                    path: "course_admin/:id/:name",
+                    component: () => import("@/views/administrator/CourseAdminView.vue"),
+                    beforeEnter: (to, from, next) => {
+                        const hasIdParam = to.params.id;
+                        const hasNameParam = to.params.name;
+                        if (!hasIdParam || !hasNameParam) {
+                            next({ name: 'home_admin' });
+                        } else {
+                            next();
+                        }
+                    },
+                },
+                {
                     name: "home_admin",
                     path: "home_admin",
                     component: () => import("@/views/administrator/HomeAdministratorView.vue"),

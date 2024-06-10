@@ -19,7 +19,6 @@
             </div>
         </div>
     </div>
-
     <v-dialog v-model="dialogLoader" :scrim="false" persistent width="auto">
         <v-card color="blue">
             <v-card-text>
@@ -50,7 +49,6 @@ export default ({
             await readyData();
             dialogLoader.value = false;
         })
-
 
         const readyData = async () => {
             findAllCourseUnitsApi(store.state.token, routeParams.value.id)

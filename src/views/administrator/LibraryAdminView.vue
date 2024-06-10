@@ -106,7 +106,6 @@ export default ({
             dialogLoader.value = true;
             createDocumentApi(store.state.token, data)
                 .then(response => {
-                    console.log(response.data)
                     dialogLoader.value = false;
                     basicAlert(async () => {
                         await readyData();

@@ -7,7 +7,7 @@
         <div class="container-cards-courses gap-4">
             <template v-for="course in dataCourses" :key="course.course_id">
                 <CardCourseAdministrator :title="course.title" :description="course.description"
-                    :id="course.course_id" />
+                    :id="course.course_id" @see-more="onSeeMore"/>
             </template>
         </div>
     </div>
@@ -55,7 +55,7 @@ export default ({
         }
 
         const onSeeMore = (data) => {
-            router.push(`/course_student_explorer/${data.id}/${data.name}`);
+            router.push(`/course_admin/${data.id}/${data.name}`);
         }
 
         const onCreateItem = (data) => {

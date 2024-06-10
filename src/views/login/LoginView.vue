@@ -78,6 +78,7 @@ export default ({
                         const user = response.data.data.user;
                         store.commit('setUsuario', user.username);
                         store.commit('setRole', user.role);
+                        store.commit('setStudentId', user.student_id);
                         store.commit('setToken', response.data.data.token);
                         store.commit('setIsAuthenticated', true);
                         if (user.role == "student") {

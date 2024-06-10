@@ -7,6 +7,7 @@ export default createStore({
         isAuthenticated: false,
         role: '',
         usuario: '',
+        studentId: '',
         token: ''
     },
     getters: {
@@ -23,6 +24,10 @@ export default createStore({
         },
         setUsuario(state, value) {
             state.usuario = value;
+            localStorage.setItem(localStorageKey, JSON.stringify(state));
+        },
+        setStudentId(state, value) {
+            state.studentId = value;
             localStorage.setItem(localStorageKey, JSON.stringify(state));
         },
         setToken(state, value) {

@@ -49,7 +49,7 @@ export default {
                     icon: "mdi mdi-bookshelf"
                 },
                 {
-                    to: "/exams_student",
+                    to: "/exams_explorer",
                     label: "Mis Examenes",
                     children: [],
                     icon: "mdi mdi-help-box-multiple"
