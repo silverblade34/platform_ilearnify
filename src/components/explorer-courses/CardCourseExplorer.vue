@@ -10,7 +10,7 @@
         </v-card-subtitle>
 
         <v-card-text>
-            <div> {{ description }}</div>
+            <div> {{ truncatedDescription(description) }}</div>
         </v-card-text>
 
         <v-card-actions>
@@ -47,4 +47,15 @@ const enrollInTheCourse = () => {
 const seeMore = () => {
     emit('see-more', { id: props.id, name: props.title })
 }
+
+const truncateText = (text, maxLength) => {
+    if (text.length <= maxLength) {
+        return text;
+    }
+    return text.substring(0, maxLength) + '...';
+};
+
+const truncatedDescription = (description) => {
+    return truncateText(description, 45);
+};
 </script>

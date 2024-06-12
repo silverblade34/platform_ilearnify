@@ -73,7 +73,7 @@ export default ({
         })
 
         const readyData = async () => {
-            findAllUsersDocumentApi(store.state.token, page.value, limit.value, search.value)
+            await findAllUsersDocumentApi(store.state.token, page.value, limit.value, search.value)
                 .then(response => {
                     dataDocuments.value = response.data.documents ? response.data.documents : [];
                 })

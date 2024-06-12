@@ -16,7 +16,7 @@
                     <div class="p-4">
                         <div class="flex justify-end gap-2 pb-3">
                             <ModalCreateMaterialVue :unitId="unit.unit_id" @create-item="onCreateMaterial" />
-                            <ModalCreateExamenVue :unitId="unit.unit_id"/>
+                            <ModalCreateExamenVue :unitId="unit.unit_id" :courseId="routeParams.id" @create-item="onCreateExam" />
                         </div>
                         <v-alert color="#F6F6F6" density="compact" class="mb-2" v-for="item in unit.materials"
                             border="start" :key="item.material_id">
@@ -81,6 +81,7 @@ import { basicAlert } from "@/helpers/SweetAlert";
 import { validateError } from "@/helpers/Validators";
 import ModalCreateMaterialVue from "@/components/admin-course/ModalCreateMaterial.vue";
 import { createMaterialApi } from "@/api/administrator/MaterialService";
+import { createExamApi } from "@/api/administrator/ExamService";
 import ModalCreateExamenVue from "@/components/admin-course/ModalCreateExamen.vue";
 
 export default ({
@@ -106,7 +107,7 @@ export default ({
         };
 
         const readyData = async () => {
-            findAllCourseUnitsApi(store.state.token, routeParams.value.id)
+            await findAllCourseUnitsApi(store.state.token, routeParams.value.id)
                 .then(response => {
                     dataUnits.value = response.data.data
                 })
@@ -143,6 +144,20 @@ export default ({
                 })
         }
 
+        const onCreateExam = (data) => {
+            dialogLoader.value = true
+            createExamApi(store.state.token, data)
+                .then(response => {
+                    dialogLoader.value = false
+                    basicAlert(async () => {
+                        await readyData();
+                    }, 'success', 'Logrado', response.data.message);
+                })
+                .catch(error => {
+                    validateError(error.response);
+                })
+        }
+
         const onCreateItem = (data) => {
             dialogLoader.value = true
             const payload = {
@@ -163,6 +178,7 @@ export default ({
 
         return {
             onCreateMaterial,
+            onCreateExam,
             onCreateItem,
             previousView,
             typeExtension,

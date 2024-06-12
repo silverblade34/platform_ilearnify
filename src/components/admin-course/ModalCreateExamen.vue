@@ -10,8 +10,12 @@
                 <v-col cols="12">
                     <v-text-field variant="outlined" label="Titulo" prepend-inner-icon="mdi-text" color="cyan-lighten-1"
                         v-model="title"></v-text-field>
-                    <div>
-                        <v-btn>Agregar pregunta</v-btn>
+                    <div class="pb-3">
+                        <ModalAgregateQuestionVue @create-item="onCreateQuestion" />
+                    </div>
+                    <div class="max-h-[20rem] overflow-y-auto">
+                        <v-alert :text="question.question_text" v-for="question in questions"
+                            :key="question.question_text" class="mb-1"></v-alert>
                     </div>
                 </v-col>
             </v-card-text>
@@ -29,28 +33,42 @@
 </template>
 <script>
 import { ref } from 'vue';
+import ModalAgregateQuestionVue from './ModalAgregateQuestion.vue';
 
 export default {
     props: {
-        unitId: Number
+        unitId: Number,
+        courseId: Number
     },
+    components: { ModalAgregateQuestionVue },
     emits: ['create-item'],
-    setup(_, { emit }) {
+    setup(props, { emit }) {
         const dialog = ref(false);
         const title = ref('');
+        const questions = ref([]);
 
         const createItem = () => {
             emit('create-item', {
+                course_id: props.courseId,
+                unit_id: props.unitId,
                 title: title.value,
+                questions: questions.value
             })
             title.value = "";
+            questions.value = [];
             dialog.value = false;
+        }
+
+        const onCreateQuestion = (data) => {
+            questions.value.push(data);
         }
 
         return {
             dialog,
             title,
-            createItem
+            questions,
+            createItem,
+            onCreateQuestion
         }
     }
 }

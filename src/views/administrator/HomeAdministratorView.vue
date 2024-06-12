@@ -45,7 +45,7 @@ export default ({
         })
 
         const readyData = async () => {
-            findAllCoursesHomeApi(store.state.token)
+            await findAllCoursesHomeApi(store.state.token)
                 .then(response => {
                     dataCourses.value = response.data.data;
                 })

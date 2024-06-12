@@ -55,7 +55,7 @@ export default {
                     icon: "mdi mdi-help-box-multiple"
                 },
                 {
-                    to: "/ratings_student",
+                    to: "/ratings_exams",
                     label: "Mis Calificaciones",
                     children: [],
                     icon: "mdi mdi-chart-bar"
