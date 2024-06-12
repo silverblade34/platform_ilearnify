@@ -91,6 +91,11 @@ const router = createRouter({
                     component: () => import("@/views/student/ExamsExplorerView.vue"),
                 },
                 {
+                    name: "ratings_exams",
+                    path: "ratings_exams",
+                    component: () => import("@/views/student/RatingsExamsView.vue"),
+                },
+                {
                     name: "course_admin",
                     path: "course_admin/:id/:name",
                     component: () => import("@/views/administrator/CourseAdminView.vue"),
