@@ -119,6 +119,16 @@ const router = createRouter({
                     path: "library_admin",
                     component: () => import("@/views/administrator/LibraryAdminView.vue"),
                 },
+                {
+                    name: "reports_admin",
+                    path: "reports_admin",
+                    component: () => import("@/views/administrator/ReportsAdminView.vue"),
+                },
+                {
+                    name: "users_admin",
+                    path: "users_admin",
+                    component: () => import("@/views/administrator/UsersAdminView.vue"),
+                },
             ]
         },
         {

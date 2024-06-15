@@ -34,9 +34,12 @@
             <v-select color="cyan-darken-1" density="compact" variant="outlined" v-model="gender" :items="genders"
                 label="Género"></v-select>
         </div>
-
-        <v-select color="cyan-darken-1" density="compact" variant="outlined" v-model="socioeconomicLevel"
-            :items="socioeconomicLevels" label="Nivel socioeconomico"></v-select>
+        <div class="grid grid-cols-2 gap-2">
+            <v-select color="cyan-darken-1" density="compact" variant="outlined" v-model="socioeconomicLevel"
+                :items="socioeconomicLevels" label="Nivel socioeconomico"></v-select>
+            <v-select color="cyan-darken-1" density="compact" variant="outlined" v-model="grade" :items="grades"
+                label="Grado"></v-select>
+        </div>
         <v-select color="cyan-darken-1" density="compact" variant="outlined" v-model="accessPlatform"
             :items="accessPlatforms" label="Uso de la plataforma diaria estimado"></v-select>
 
@@ -99,6 +102,10 @@ const genders = [
     "Otro"
 ];
 
+const grades = [
+    "1", "2", "3", "4", "5"
+]
+
 const accessPlatforms = [
     "1h - 2h",
     "2h - 4h",
@@ -124,7 +131,7 @@ const birthdate = ref("");
 const phone = ref("");
 const district = ref("");
 const gender = ref("");
-
+const grade = ref("");
 const socioeconomicLevel = ref("");
 const accessPlatform = ref("");
 
@@ -142,6 +149,7 @@ const createStudent = () => {
         "phone": phone.value,
         "district": district.value,
         "gender": gender.value,
+        "grade_id": parseInt(grade.value),
         "socioeconomicLevel": socioeconomicLevel.value,
         "AccessPlatform": accessPlatform.value,
     });

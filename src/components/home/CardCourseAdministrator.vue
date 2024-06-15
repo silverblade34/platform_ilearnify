@@ -16,6 +16,9 @@
         <v-card-actions>
             <v-btn color="cyan-darken-1" size="small" @click="seeMore" variant="outlined" class="ml-2"> <v-icon
                     icon="mdi-square-edit-outline"></v-icon> Personalizar</v-btn>
+
+            <v-btn color="green-lighten-1" size="small" @click="editCourse" variant="outlined" class="ml-2"> <v-icon
+                    icon="mdi mdi-pencil"></v-icon> Editar</v-btn>
         </v-card-actions>
     </v-card>
 </template>
@@ -29,10 +32,14 @@ const props = defineProps({
     description: String,
 });
 
-const emit = defineEmits(['see-more'])
+const emit = defineEmits(['see-more', 'edit-course'])
 
 const seeMore = () => {
     emit('see-more', { id: props.id, name: props.title })
+}
+
+const editCourse = () => {
+    emit('edit-course', { id: props.id })
 }
 
 const truncateText = (text, maxLength) => {

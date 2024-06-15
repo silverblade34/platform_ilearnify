@@ -81,6 +81,18 @@ export default {
                     children: [],
                     icon: "mdi mdi-bookshelf"
                 },
+                {
+                    to: "/reports_admin",
+                    label: "Reportes",
+                    children: [],
+                    icon: "mdi mdi-table"
+                },
+                {
+                    to: "/users_admin",
+                    label: "Usuarios",
+                    children: [],
+                    icon: "mdi mdi-account-group"
+                },
             ]
         }
         return { navItems };

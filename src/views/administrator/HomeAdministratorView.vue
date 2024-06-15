@@ -6,8 +6,8 @@
     <div class="py-5">
         <div class="container-cards-courses gap-4">
             <template v-for="course in dataCourses" :key="course.course_id">
-                <CardCourseAdministrator :title="course.title" :description="course.description"
-                    :id="course.course_id" @see-more="onSeeMore"/>
+                <CardCourseAdministrator :title="course.title" :description="course.description" :id="course.course_id"
+                    @see-more="onSeeMore" @edit-course="onEditCourse" />
             </template>
         </div>
     </div>
@@ -19,10 +19,12 @@
             </v-card-text>
         </v-card>
     </v-dialog>
+    <ModalEditCourseVue :itemEdit="courseEdit" :openModal="dialogEdit" @cancel-item="dialogEdit = false"
+        @edit-item="onEditItem" />
 </template>
 <script>
 import { findAllCoursesHomeApi } from '@/api/administrator/HomeService';
-import { createCourseApi } from '@/api/administrator/CourseService';
+import { createCourseApi, updateCourseApi } from '@/api/administrator/CourseService';
 import CardCourseAdministrator from '@/components/home/CardCourseAdministrator.vue';
 import { onMounted, ref } from 'vue';
 import store from '@/store';
@@ -30,13 +32,16 @@ import { validateError } from '@/helpers/Validators';
 import { useRouter } from 'vue-router';
 import ModalCreateCourseVue from '@/components/home/ModalCreateCourse.vue';
 import { basicAlert } from '@/helpers/SweetAlert';
+import ModalEditCourseVue from '@/components/admin-course/ModalEditCourse.vue';
 
 export default ({
-    components: { CardCourseAdministrator, ModalCreateCourseVue },
+    components: { CardCourseAdministrator, ModalCreateCourseVue, ModalEditCourseVue },
     setup() {
         const dataCourses = ref([]);
         const dialogLoader = ref(false);
+        const courseEdit = ref({});
         const router = useRouter();
+        const dialogEdit = ref(false);
 
         onMounted(async () => {
             dialogLoader.value = true;
@@ -58,6 +63,11 @@ export default ({
             router.push(`/course_admin/${data.id}/${data.name}`);
         }
 
+        const onEditCourse = (data) => {
+            dialogEdit.value = true;
+            courseEdit.value = dataCourses.value.find(course => course.course_id == data.id);
+        }
+
         const onCreateItem = (data) => {
             dialogLoader.value = true
             createCourseApi(store.state.token, data)
@@ -68,13 +78,39 @@ export default ({
                     }, 'success', 'Logrado', response.data.message);
                 })
                 .catch(error => {
+                    dialogLoader.value = false
                     validateError(error.response);
                 })
         }
 
+        const onEditItem = async (data) => {
+            dialogEdit.value = false
+            dialogLoader.value = true
+            if (data.title != "" && data.description != "") {
+                await updateCourseApi(store.state.token, data, courseEdit.value.course_id)
+                    .then(response => {
+                        dialogLoader.value = false
+                        basicAlert(() => {
+                            readyData()
+                        }, 'success', 'Logrado', response.data.message)
+                    })
+                    .catch(error => {
+                        dialogLoader.value = false
+                        validateError(error.response);
+                    })
+            } else {
+                dialogLoader.value = false
+                basicAlert(() => { }, 'warning', 'Error', "Los campos no deben estar vacios")
+            }
+        }
+
         return {
+            onEditItem,
             onCreateItem,
+            onEditCourse,
             onSeeMore,
+            dialogEdit,
+            courseEdit,
             dialogLoader,
             dataCourses
         }
