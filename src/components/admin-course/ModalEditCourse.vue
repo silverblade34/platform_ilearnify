@@ -44,8 +44,6 @@ export default {
 
         watch(() => props.itemEdit, (newVal) => {
             if (Object.keys(newVal).length !== 0) {
-                console.log("----------------MODAL EDIT----------------")
-                console.log(newVal);
                 title.value = newVal.title
                 description.value = newVal.description
             }

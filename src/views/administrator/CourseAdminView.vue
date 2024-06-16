@@ -16,7 +16,8 @@
                     <div class="p-4">
                         <div class="flex justify-end gap-2 pb-3">
                             <ModalCreateMaterialVue :unitId="unit.unit_id" @create-item="onCreateMaterial" />
-                            <ModalCreateExamenVue :unitId="unit.unit_id" :courseId="routeParams.id" @create-item="onCreateExam" />
+                            <ModalCreateExamenVue :unitId="unit.unit_id" :courseId="routeParams.id"
+                                @create-item="onCreateExam" />
                         </div>
                         <v-alert color="#F6F6F6" density="compact" class="mb-2" v-for="item in unit.materials"
                             border="start" :key="item.material_id">
@@ -31,8 +32,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <v-btn density="compact" icon="mdi-chevron-right" color="cyan-darken-1" class="mr-2"
-                                        variant="tonal"></v-btn>
+
                                 </div>
                             </div>
                         </v-alert>
@@ -50,8 +50,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <v-btn density="compact" icon="mdi-chevron-right" color="cyan-darken-1" class="mr-2"
-                                        variant="tonal"></v-btn>
+
                                 </div>
                             </div>
                         </v-alert>

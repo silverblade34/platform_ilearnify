@@ -86,8 +86,6 @@ export default {
         .then((response) => {
           console.log(response);
           dataResults.value = response.data.data ? response.data.data : [];
-          console.log("---------------DATA RESULTS---------------");
-          console.log(dataResults.value);
           agrupedDataAverageResults(dataResults.value);
           agrupedDataStatusAnswersResults(dataResults.value);
         })

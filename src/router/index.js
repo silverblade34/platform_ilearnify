@@ -129,6 +129,11 @@ const router = createRouter({
                     path: "users_admin",
                     component: () => import("@/views/administrator/UsersAdminView.vue"),
                 },
+                {
+                    name: "predictive_analysis",
+                    path: "predictive_analysis",
+                    component: () => import("@/views/administrator/PredictiveAnalysisView.vue"),
+                },
             ]
         },
         {
