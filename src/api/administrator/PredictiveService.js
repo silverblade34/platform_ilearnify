@@ -1,13 +1,15 @@
 import axiosInstance from '@/config/http.config';
 
-const baseURL = process.env.VUE_APP_BASE_URL_ANALYSIS;
+const baseURLPrediction = process.env.VUE_APP_BASE_URL_ANALYSIS;
 
 export function findLogisticRegression() {
-    console.log("-----------------------------------1");
-    console.log(baseURL);
-    return axiosInstance.get(`${baseURL}logistic_regression/predict`);
+    return axiosInstance.get(`${baseURLPrediction}predict_logistic_regression`);
 }
 
 export function findDecisionTree() {
-    return axiosInstance.get(`${baseURL}decision_tree/predict`);
+    return axiosInstance.get(`${baseURLPrediction}predict_decision_tree`);
+}
+
+export function findMetrics() {
+    return axiosInstance.get(`${baseURLPrediction}metrics`);
 }
