@@ -13,6 +13,9 @@
 
                     <v-textarea variant="outlined" label="Descripción" prepend-inner-icon="mdi-text-box-plus"
                         color="cyan-lighten-1" v-model="description" rows="2"></v-textarea>
+
+                    <v-select color="cyan-darken-1" variant="outlined" v-model="grade" :items="grades"
+                        label="Grado"></v-select>
                 </v-col>
             </v-card-text>
             <v-card-actions>
@@ -35,17 +38,24 @@ export default {
         const dialog = ref(false);
         const description = ref('');
         const title = ref('');
+        const grade = ref("");
+        const grades = [
+            "1", "2", "3", "4", "5"
+        ]
 
         const createItem = () => {
             emit('create-item', {
                 title: title.value,
                 description: description.value,
+                grade_id: grade.value
             })
             title.value = description.value = "";
             dialog.value = false
         }
         return {
+            grade,
             dialog,
+            grades,
             title,
             description,
             createItem

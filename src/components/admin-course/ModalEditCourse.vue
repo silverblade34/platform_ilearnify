@@ -2,7 +2,7 @@
     <v-dialog v-model="dialog" width="500" @click:outside="cancelItem">
         <v-card>
             <v-toolbar>
-                <span class="px-4 w-full text-center text-blue-400 font-bold title_views">EDITAR PLANTA</span>
+                <span class="px-4 w-full text-center text-blue-400 font-bold title_views">EDITAR CURSO</span>
             </v-toolbar>
             <v-card-text>
                 <v-col cols="12">

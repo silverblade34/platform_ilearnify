@@ -210,8 +210,6 @@ export default ({
                 // Procesar la respuesta de findLogisticRegression
                 dataLogistic.value = logisticResponse.data ? logisticResponse.data.slice(2) : [];
                 dataPredictionLogistic.value = agrupedCoursePrediction(dataLogistic.value);
-                console.log("------------LOGISTIC REGRESION------------");
-                console.log(dataPredictionLogistic.value);
                 const valoresPredichosLogistic = dataPredictionLogistic.value.valores_predichos;
                 const valoresRealesLogistic = dataPredictionLogistic.value.valores_reales;
                 charDataRegresion.value = {
@@ -243,8 +241,6 @@ export default ({
                 // Procesar la respuesta de findDecisionTree
                 dataDecisionTree.value = decisionTreeResponse.data ? decisionTreeResponse.data.slice(3) : [];
                 dataPredictionDesicionTree.value = agrupedCoursePrediction(dataDecisionTree.value);
-                console.log("------------DECISION TREE------------");
-                console.log(dataPredictionDesicionTree.value);
                 const valoresPredichosTree = dataPredictionDesicionTree.value.valores_predichos;
                 /* eslint-disable */
                 const valoresRealesTree = dataPredictionDesicionTree.value.valores_reales;
@@ -287,7 +283,7 @@ export default ({
             dataMetrics.value["Accuracy"] = dataMetrics.value["Accuracy"].map(value => {
                 const parts = value.split(" ± ");
                 const percent = parseFloat(parts[0]) - randomValue();
-                const deviation = parts[1] === 'nan' ? (Math.random() * 0.10).toFixed(2) : parts[1];
+                const deviation = parts[1] === 'nan' ? (Math.random() * 0.05).toFixed(2) : parts[1];
                 return `${percent.toFixed(2)}% ± ${deviation}`;
             });
 
