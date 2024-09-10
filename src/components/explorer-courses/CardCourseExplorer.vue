@@ -15,8 +15,8 @@
 
         <v-card-actions>
             <v-btn color="cyan-darken-1" text="Ver más" size="small" variant="tonal" @click="seeMore"></v-btn>
-            <v-btn v-if="!isEnrolled" color="indigo-lighten-2" size="small" variant="tonal"
-                @click="enrollInTheCourse">Inscribirse</v-btn>
+            <v-btn v-if="!isEnrolled" color="indigo-lighten-2" size="small"
+                @click="enrollInTheCourse" variant="outlined">Inscribirse</v-btn>
             <v-btn v-else color="indigo-lighten-2" size="small">Inscrito</v-btn>
         </v-card-actions>
     </v-card>

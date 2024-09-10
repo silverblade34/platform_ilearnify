@@ -134,6 +134,24 @@ const router = createRouter({
                     path: "predictive_analysis",
                     component: () => import("@/views/administrator/PredictiveAnalysisView.vue"),
                 },
+                {
+                    name: "settings",
+                    path: "settings",
+                    component: () => import("@/views/student/SettingsView.vue"),
+                },
+                {
+                    name: "predictive_student",
+                    path: "predictive_student/:id",
+                    component: () => import("@/views/administrator/PredictiveStudent.vue"),
+                    beforeEnter: (to, from, next) => {
+                        const hasIdParam = to.params.id;
+                        if (!hasIdParam) {
+                            next({ name: 'home_admin' });
+                        } else {
+                            next();
+                        }
+                    },
+                },
             ]
         },
         {

@@ -1,7 +1,7 @@
 <template>
     <h1 class="font-bold text-xl text-gray-500 title-views">Usuarios</h1>
     <div class="py-5">
-        <TableUsersVue :desserts="dataUsers" />
+        <TableUsersVue :desserts="dataUsers" @view-details="onViewDetails" />
     </div>
     <v-dialog v-model="dialogLoader" :scrim="false" persistent width="auto">
         <v-card color="blue">
@@ -18,12 +18,14 @@ import { onMounted, ref } from 'vue';
 import store from '@/store';
 import { validateError } from '@/helpers/Validators';
 import TableUsersVue from '@/components/admin-users/TableUsers.vue';
+import { useRouter } from 'vue-router';
 
 export default ({
     components: { TableUsersVue },
     setup() {
         const dataUsers = ref([]);
         const dialogLoader = ref(false);
+        const router = useRouter();
 
         onMounted(async () => {
             dialogLoader.value = true;
@@ -42,9 +44,16 @@ export default ({
                 })
         }
 
+        const onViewDetails = (userId) => {
+            console.log("----------------------------1")
+            console.log(userId.userId)
+            router.push(`/predictive_student/${userId.userId}`);
+        }
+
         return {
             dataUsers,
-            dialogLoader
+            dialogLoader,
+            onViewDetails
         }
     }
 })

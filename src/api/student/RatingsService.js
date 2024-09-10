@@ -6,6 +6,5 @@ export function findAllRatingsApi(token, userId) {
     const headers = {
         Authorization: `Bearer ${token}`,
     };
-    console.log(`${baseURL}exams/results/student/${userId}`)
     return axiosInstance.get(`${baseURL}exams/results/student/${userId}`, { headers });
 }

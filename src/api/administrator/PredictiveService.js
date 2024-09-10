@@ -13,3 +13,11 @@ export function findDecisionTree() {
 export function findMetrics() {
     return axiosInstance.get(`${baseURLPrediction}metrics`);
 }
+
+export function findDecisionTreeStudentId(studentId) {
+    return axiosInstance.get(`${baseURLPrediction}predict_decision_tree_studentid/${studentId}`);
+}
+
+export function findLogisticRegressionStudentId(studentId) {
+    return axiosInstance.get(`${baseURLPrediction}predict_logistic_regression_studentid/${studentId}`);
+}

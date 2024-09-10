@@ -9,3 +9,21 @@ export function studentRegisterApi(token, data) {
 
     return axiosInstance.post(`${baseURL}student/register`, data, { headers });
 }
+
+
+export function studentByIdApi(token, studentId) {
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
+
+    return axiosInstance.get(`${baseURL}student/${studentId}`, { headers });
+}
+
+
+export function studentUpdateApi(token, data, studentId) {
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
+
+    return axiosInstance.put(`${baseURL}student/update/${studentId}`, data, { headers });
+}
