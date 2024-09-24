@@ -26,15 +26,29 @@
                 <Bar :options="chartOptions" :data="charDataExamsCount" />
             </div>
         </div>
-        <div class="grid grid-cols-2 gap-5 mt-10">
-            <div class="charts doughnutChart">
+        <div class="mt-10">
+            <div class="charts h-[35rem]">
                 <h4 class="pb-3 font-semibold text-gray-500">Predicción Algoritmo Regresión Logistica</h4>
                 <Bar :options="chartOptions" :data="charDataRegresion" />
             </div>
-            <div class="charts doughnutChart">
-                <h4 class="pb-3 font-semibold text-gray-500">Predicción Algoritmo Arbol de desiciones</h4>
-                <Bar :options="chartOptions" :data="charDataTree" />
-            </div>
+        </div>
+        <div class="mt-15">
+            <table class="min-w-full border-collapse border border-gray-300">
+                <thead>
+                    <tr>
+                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left">Curso</th>
+                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left">Predicción con Mayor
+                            Probabilidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="curso in dataRegresionLogistic" :key="curso.curso" class="odd:bg-white even:bg-gray-50">
+                        <td class="border border-gray-300 px-4 py-2">{{ curso.curso }}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{ obtenerMayorPrediccion(curso.valores_predichos)
+                            }}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
     <v-dialog v-model="dialogLoader" :scrim="false" persistent width="auto">
@@ -63,8 +77,7 @@ import {
     ArcElement,
     LinearScale,
 } from "chart.js";
-import { studentByIdApi } from "@/api/student/StudentService";
-import { findDecisionTreeStudentId, findLogisticRegressionStudentId } from "@/api/administrator/PredictiveService";
+import { getPredectiveStudentApi, studentByIdApi } from "@/api/student/StudentService";
 import { basicAlert } from "@/helpers/SweetAlert";
 
 ChartJS.register(
@@ -86,46 +99,6 @@ export default {
         const routeParams = ref(route.params);
         /* eslint-disable */
         const dataResults = ref([]);
-        const charDataTree = ref({
-            labels: [],
-            datasets: [
-                {
-                    label: 'No pase',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1,
-                    data: []
-                },
-                {
-                    label: 'Malo',
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1,
-                    data: []
-                },
-                {
-                    label: 'Regularmente',
-                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
-                    borderColor: 'rgba(255, 206, 86, 1)',
-                    borderWidth: 1,
-                    data: []
-                },
-                {
-                    label: 'Bueno',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1,
-                    data: []
-                },
-                {
-                    label: 'Muy bueno',
-                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                    borderColor: 'rgba(153, 102, 255, 1)',
-                    borderWidth: 1,
-                    data: []
-                }
-            ]
-        });
         const averageDataCourses = ref([]);
         const instance = getCurrentInstance();
         const charDataAverage = ref({
@@ -181,6 +154,8 @@ export default {
             datasets: [{ data: [0] }],
         });
 
+        const dataRegresionLogistic = ref([])
+
         const charDataExamsCount = ref({
             labels: ["Label"],
             datasets: [{ data: [0] }],
@@ -195,74 +170,23 @@ export default {
 
         const readyData = async () => {
             try {
-                const [responseRatings, student, responseDecisionTreeStudent, responseLogisticRegressionStudent] = await Promise.all([
+                const [responseRatings, student, responseLogisticRegressionStudent] = await Promise.all([
                     findAllRatingsApi(store.state.token, routeParams.value.id),
                     studentByIdApi(store.state.token, routeParams.value.id),
-                    findDecisionTreeStudentId(routeParams.value.id),
-                    findLogisticRegressionStudentId(routeParams.value.id),
+                    getPredectiveStudentApi(routeParams.value.id),
                 ])
 
                 studentParsed.value = student.data.data
                 dataResults.value = responseRatings.data.data ? responseRatings.data.data : [];
                 agrupedDataAverageResults(dataResults.value);
                 agrupedDataStatusAnswersResults(dataResults.value);
-                processTreeData(responseDecisionTreeStudent.data);
-                processLogisticRegressionChart(responseLogisticRegressionStudent.data);
+                dataRegresionLogistic.value = responseLogisticRegressionStudent.data.data
+                processLogisticRegressionChart(responseLogisticRegressionStudent.data.data);
 
             } catch (error) {
                 dialogLoader.value = false;
                 basicAlert(() => { }, 'warning', 'Datos insuficientes', 'No se puede realizar una predicción debido a la poca cantidad de registros');
             }
-        };
-
-        const processTreeData = (data) => {
-            const labels = data.map(item => item.curso);
-            const predictedBueno = data.map(item => item.valores_predichos["prediccion de bueno"]);
-            const predictedMalo = data.map(item => item.valores_predichos["prediccion de malo"]);
-            const predictedMuyBueno = data.map(item => item.valores_predichos["prediccion de muy bueno"]);
-            const predictedNoPase = data.map(item => item.valores_predichos["prediccion de no pase"]);
-            const predictedRegularmente = data.map(item => item.valores_predichos["prediccion de regularmente"]);
-
-            charDataTree.value = {
-                labels: labels,
-                datasets: [
-                    {
-                        label: "Predicción Bueno",
-                        data: predictedBueno,
-                        backgroundColor: "rgba(75, 192, 192, 0.2)",
-                        borderColor: "rgba(75, 192, 192, 1)",
-                        borderWidth: 1,
-                    },
-                    {
-                        label: "Predicción Malo",
-                        data: predictedMalo,
-                        backgroundColor: "rgba(255, 99, 132, 0.2)",
-                        borderColor: "rgba(255, 99, 132, 1)",
-                        borderWidth: 1,
-                    },
-                    {
-                        label: "Predicción Muy Bueno",
-                        data: predictedMuyBueno,
-                        backgroundColor: "rgba(54, 162, 235, 0.2)",
-                        borderColor: "rgba(54, 162, 235, 1)",
-                        borderWidth: 1,
-                    },
-                    {
-                        label: "Predicción No Pase",
-                        data: predictedNoPase,
-                        backgroundColor: "rgba(255, 206, 86, 0.2)",
-                        borderColor: "rgba(255, 206, 86, 1)",
-                        borderWidth: 1,
-                    },
-                    {
-                        label: "Predicción Regularmente",
-                        data: predictedRegularmente,
-                        backgroundColor: "rgba(153, 102, 255, 0.2)",
-                        borderColor: "rgba(153, 102, 255, 1)",
-                        borderWidth: 1,
-                    }
-                ]
-            };
         };
 
         // Procesar datos para el gráfico de regresión logística
@@ -273,40 +197,41 @@ export default {
             const predictedMuyBueno = data.map(item => item.valores_predichos["prediccion de muy bueno"]);
             const predictedNoPase = data.map(item => item.valores_predichos["prediccion de no pase"]);
             const predictedRegularmente = data.map(item => item.valores_predichos["prediccion de regularmente"]);
-
+            console.log("----------------VALORES PREDICHOS----------")
+            console.log(data)
             charDataRegresion.value = {
                 labels: labels,
                 datasets: [
                     {
-                        label: "Predicción Bueno",
+                        label: "Bueno",
                         data: predictedBueno,
                         backgroundColor: "rgba(75, 192, 192, 0.2)",
                         borderColor: "rgba(75, 192, 192, 1)",
                         borderWidth: 1,
                     },
                     {
-                        label: "Predicción Malo",
+                        label: "Insatisfactorio",
                         data: predictedMalo,
                         backgroundColor: "rgba(255, 99, 132, 0.2)",
                         borderColor: "rgba(255, 99, 132, 1)",
                         borderWidth: 1,
                     },
                     {
-                        label: "Predicción Muy Bueno",
+                        label: "Excelente",
                         data: predictedMuyBueno,
                         backgroundColor: "rgba(54, 162, 235, 0.2)",
                         borderColor: "rgba(54, 162, 235, 1)",
                         borderWidth: 1,
                     },
                     {
-                        label: "Predicción No Pase",
+                        label: "Requiere Atención",
                         data: predictedNoPase,
                         backgroundColor: "rgba(255, 206, 86, 0.2)",
                         borderColor: "rgba(255, 206, 86, 1)",
                         borderWidth: 1,
                     },
                     {
-                        label: "Predicción Regularmente",
+                        label: "Satisfactorio",
                         data: predictedRegularmente,
                         backgroundColor: "rgba(153, 102, 255, 0.2)",
                         borderColor: "rgba(153, 102, 255, 1)",
@@ -315,6 +240,26 @@ export default {
                 ]
             };
         };
+
+        const obtenerMayorPrediccion = (valoresPredichos) => {
+            const predicciones = Object.entries(valoresPredichos);
+            const mayorPrediccion = predicciones.reduce((max, current) =>
+                current[1] > max[1] ? current : max
+            );
+            let prediction = ""
+            if(mayorPrediccion[0] == "prediccion de bueno"){
+                prediction = "Bueno"
+            }else if(mayorPrediccion[0] == "prediccion de malo"){
+                prediction = "Insatisfactorio"
+            }else if(mayorPrediccion[0] == "prediccion de muy bueno"){
+                prediction = "Excelente"
+            }else if(mayorPrediccion[0] == "prediccion de no pase"){
+                prediction = "Requiere Atención"
+            }else if(mayorPrediccion[0] == "prediccion de regularmente"){
+                prediction = "Satisfactorio"
+            }
+            return prediction;
+        }
 
         const agrupedDataStatusAnswersResults = (data) => {
             // Calcular el promedio general de correct_answers y wrong_answers
@@ -396,8 +341,9 @@ export default {
         return {
             dialogLoader,
             charDataRegresion,
-            charDataTree,
+            dataRegresionLogistic,
             previousView,
+            obtenerMayorPrediccion,
             studentParsed,
             chartOptions,
             charDataAverage,

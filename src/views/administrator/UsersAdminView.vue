@@ -1,6 +1,10 @@
 <template>
     <h1 class="font-bold text-xl text-gray-500 title-views">Usuarios</h1>
     <div class="py-5">
+        <div class="fle justify-end pb-5">
+            <v-btn color="blue" size="small" @click="uploadPredictive"> <v-icon class="mr-1">mdi mdi-refresh</v-icon>
+                Sincronizar predicción</v-btn>
+        </div>
         <TableUsersVue :desserts="dataUsers" @view-details="onViewDetails" />
     </div>
     <v-dialog v-model="dialogLoader" :scrim="false" persistent width="auto">
@@ -19,6 +23,8 @@ import store from '@/store';
 import { validateError } from '@/helpers/Validators';
 import TableUsersVue from '@/components/admin-users/TableUsers.vue';
 import { useRouter } from 'vue-router';
+import { findLogisticRegressionStudentId } from '@/api/administrator/PredictiveService';
+import { updloadPredictiveStudentApi } from '@/api/student/StudentService';
 
 export default ({
     components: { TableUsersVue },
@@ -45,14 +51,44 @@ export default ({
         }
 
         const onViewDetails = (userId) => {
-            console.log("----------------------------1")
-            console.log(userId.userId)
             router.push(`/predictive_student/${userId.userId}`);
         }
+
+        const uploadPredictive = async () => {
+            dialogLoader.value = true;
+            await uploadPredictiveUsers()
+            dialogLoader.value = false;
+        }
+
+        const uploadPredictiveUsers = async () => {
+            const batchSize = 10;
+            const totalUsers = dataUsers.value.length;
+
+            for (let i = 0; i < totalUsers; i += batchSize) {
+                const userBatch = dataUsers.value.slice(i, i + batchSize);
+
+                const promises = userBatch.map(async (user) => {
+                    try {
+                        const predictiveStudent = await findLogisticRegressionStudentId(user.studentId);
+                        const payload = {
+                            "studentId": user.studentId,
+                            "predictive": predictiveStudent.data
+                        };
+                        await updloadPredictiveStudentApi(payload);
+                    } catch (e) {
+                        console.log(`Error con el estudiante ID: ${user.studentId}`);
+                        console.log(e);
+                    }
+                });
+
+                await Promise.all(promises);
+            }
+        };
 
         return {
             dataUsers,
             dialogLoader,
+            uploadPredictive,
             onViewDetails
         }
     }

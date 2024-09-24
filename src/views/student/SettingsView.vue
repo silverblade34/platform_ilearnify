@@ -1,7 +1,7 @@
 <template>
     <v-container>
         <!-- Título -->
-        <h1 class="font-bold text-xl text-gray-500 title-views">Configuraciones del Estudiante</h1>
+        <h1 class="font-bold text-xl text-gray-500 title-views">Perfil</h1>
 
         <!-- Imagen del Estudiante -->
         <v-row justify="center">

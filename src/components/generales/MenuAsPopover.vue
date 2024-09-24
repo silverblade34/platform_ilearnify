@@ -22,7 +22,7 @@
                         <div class="cursor-pointer transition hover:text-blue-300
                         ease-in duration-100 flex gap-2 rounded-lg items-center text-gray-400 text-sm">
                             <i class="fa-solid fa-user"></i>
-                            <span> Perfil</span>
+                            <router-link href="/perfil" to="/perfil"> <span> Perfil</span></router-link> 
                         </div>
                     </v-list-item>
                     <v-list-item class="px-5">

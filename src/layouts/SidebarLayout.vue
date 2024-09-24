@@ -65,13 +65,7 @@ export default {
                     label: "Explorar cursos",
                     children: [],
                     icon: "mdi mdi-book-multiple"
-                },
-                {
-                    to: "/settings",
-                    label: "Configuraciones",
-                    children: [],
-                    icon: "mdi mdi-cog"
-                },
+                }
             ]
         } else if (store.state.role == "admin") {
             navItems.value = [

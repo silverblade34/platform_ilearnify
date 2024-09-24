@@ -19,6 +19,13 @@ export function studentByIdApi(token, studentId) {
     return axiosInstance.get(`${baseURL}student/${studentId}`, { headers });
 }
 
+export function updloadPredictiveStudentApi(payload) {
+    return axiosInstance.post(`${baseURL}student/uploadPredictive`, payload);
+}
+
+export function getPredectiveStudentApi(studentId) {
+    return axiosInstance.get(`${baseURL}student/predictive/${studentId}`);
+}
 
 export function studentUpdateApi(token, data, studentId) {
     const headers = {

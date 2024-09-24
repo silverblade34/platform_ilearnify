@@ -135,8 +135,8 @@ const router = createRouter({
                     component: () => import("@/views/administrator/PredictiveAnalysisView.vue"),
                 },
                 {
-                    name: "settings",
-                    path: "settings",
+                    name: "perfil",
+                    path: "perfil",
                     component: () => import("@/views/student/SettingsView.vue"),
                 },
                 {
