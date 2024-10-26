@@ -1,10 +1,6 @@
 <template>
     <h1 class="font-bold text-xl text-gray-500 title-views">Usuarios</h1>
     <div class="py-5">
-        <div class="fle justify-end pb-5">
-            <v-btn color="blue" size="small" @click="uploadPredictive"> <v-icon class="mr-1">mdi mdi-refresh</v-icon>
-                Sincronizar predicción</v-btn>
-        </div>
         <TableUsersVue :desserts="dataUsers" @view-details="onViewDetails" />
     </div>
     <v-dialog v-model="dialogLoader" :scrim="false" persistent width="auto">

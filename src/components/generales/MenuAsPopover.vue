@@ -10,26 +10,17 @@
                 <v-list>
                     <v-list-item :prepend-avatar="avatarPath" :title="username" :subtitle="rol">
                         <template v-slot:append>
-                            <v-btn variant="text" :class="fav ? 'text-red' : ''" icon="mdi-heart"
-                                @click="fav = !fav"></v-btn>
                         </template>
                     </v-list-item>
                 </v-list>
 
                 <v-divider></v-divider>
                 <v-list>
-                    <v-list-item class="px-5">
+                    <v-list-item v-if="rol == 'Estudiante'" class="px-5">
                         <div class="cursor-pointer transition hover:text-blue-300
                         ease-in duration-100 flex gap-2 rounded-lg items-center text-gray-400 text-sm">
                             <i class="fa-solid fa-user"></i>
                             <router-link href="/perfil" to="/perfil"> <span> Perfil</span></router-link> 
-                        </div>
-                    </v-list-item>
-                    <v-list-item class="px-5">
-                        <div class="cursor-pointer transition hover:text-blue-300
-                        ease-in duration-100 flex gap-2 rounded-lg items-center text-gray-400 text-sm">
-                            <i class="fa-solid fa-gear"></i>
-                            <span> Configuración</span>
                         </div>
                     </v-list-item>
                 </v-list>

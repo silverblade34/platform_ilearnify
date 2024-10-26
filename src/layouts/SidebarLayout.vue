@@ -93,12 +93,6 @@ export default {
                     children: [],
                     icon: "mdi mdi-account-group"
                 },
-                {
-                    to: "/predictive_analysis",
-                    label: "Analisis Predictivo",
-                    children: [],
-                    icon: "mdi mdi-chart-bar-stacked"
-                },
             ]
         }
         return { navItems };
