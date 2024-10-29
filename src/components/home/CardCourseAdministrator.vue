@@ -10,6 +10,7 @@
         </v-card-subtitle>
 
         <v-card-text>
+            <div class="text-blue-500"> Grado: {{ grade }}</div>
             <div> {{ truncatedDescription(description) }}</div>
         </v-card-text>
 
@@ -29,6 +30,7 @@ import { defineProps, defineEmits } from 'vue';
 const props = defineProps({
     id: Number,
     title: String,
+    grade: String,
     description: String,
 });
 

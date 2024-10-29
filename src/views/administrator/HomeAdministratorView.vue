@@ -6,7 +6,7 @@
     <div class="py-5">
         <div class="container-cards-courses gap-4">
             <template v-for="course in dataCourses" :key="course.course_id">
-                <CardCourseAdministrator :title="course.title" :description="course.description" :id="course.course_id"
+                <CardCourseAdministrator :title="course.title" :description="course.description" :id="course.course_id" :grade="course.grade_id"
                     @see-more="onSeeMore" @edit-course="onEditCourse" />
             </template>
         </div>
