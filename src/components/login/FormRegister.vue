@@ -153,7 +153,7 @@ const validateFields = () => {
     if (!firstName.value || !lastName.value || !username.value || !password.value ||
         !email.value || !birthdate.value || !phone.value || !district.value ||
         !gender.value || !grade.value || !socioeconomicLevel.value || !accessPlatform.value) {
-        basicAlert(() => { }, 'warning', 'Alerta', 'Todos los campos son obligatorios.')
+        basicAlert(() => { }, 'warning', 'Alerta', 'Complete los campos vacios')
         return false;
     }
 
