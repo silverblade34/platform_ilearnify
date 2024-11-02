@@ -19,13 +19,13 @@
             label="Contraseña"></v-text-field>
 
         <v-text-field color="cyan-darken-1" density="compact" prepend-inner-icon="mdi mdi-email" variant="outlined"
-            label="Correo" v-model="email"></v-text-field>
+            label="Correo" v-model="email" :rules="[emailRule]" class="pb-4"></v-text-field>
 
-        <div class="grid grid-cols-2 gap-2">
+        <div class="grid grid-cols-2 gap-2 pb-4">
             <v-text-field color="cyan-darken-1" density="compact" variant="outlined" type="date" v-model="birthdate"
                 label="Fecha nacimiento"></v-text-field>
             <v-text-field color="cyan-darken-1" density="compact" prepend-inner-icon="mdi mdi-phone" variant="outlined"
-                v-model="phone" label="N° Celular"></v-text-field>
+                v-model="phone" label="N° Celular" :rules="[phoneRule]" type="number"></v-text-field>
         </div>
 
         <div class="grid grid-cols-2 gap-2">
@@ -55,6 +55,17 @@
 </template>
 <script setup>
 import { ref } from 'vue';
+import { basicAlert } from '@/helpers/SweetAlert';
+
+const emailRule = (v) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(v) || "Por favor, ingrese un correo electrónico válido";
+};
+
+const phoneRule = (v) => {
+    const phoneRegex = /^[0-9]+$/;
+    return phoneRegex.test(v) || "Por favor, ingrese solo números en el campo de teléfono";
+};
 
 const districts = [
     "Lima",
@@ -138,7 +149,32 @@ const accessPlatform = ref("");
 /* eslint-disable */
 const emit = defineEmits(['create-student', 'show-login']);
 
+const validateFields = () => {
+    if (!firstName.value || !lastName.value || !username.value || !password.value ||
+        !email.value || !birthdate.value || !phone.value || !district.value ||
+        !gender.value || !grade.value || !socioeconomicLevel.value || !accessPlatform.value) {
+        basicAlert(() => { }, 'warning', 'Alerta', 'Todos los campos son obligatorios.')
+        return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.value)) {
+        basicAlert(() => { }, 'warning', 'Alerta', 'Por favor, ingrese un correo electrónico válido.')
+        return false;
+    }
+
+    const phoneRegex = /^[0-9]+$/;
+    if (!phoneRegex.test(phone.value)) {
+        basicAlert(() => { }, 'warning', 'Alerta', 'Por favor, ingrese solo números en el campo de teléfono.')
+        return false;
+    }
+
+    return true;
+};
+
 const createStudent = () => {
+    if (!validateFields()) return;
+
     emit('create-student', {
         "username": username.value,
         "password": password.value,
